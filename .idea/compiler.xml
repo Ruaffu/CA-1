@@ -15,7 +15,11 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+<<<<<<< HEAD
       <module name="devops-starter" options="-endorseddirs &quot;C:\Users\ch__s\OneDrive\Documents\Datamatiker cph business\3rd semester\CA-1\dat3-startcode-master\target/endorsed&quot;" />
+=======
+      <module name="devops-starter" options="-endorseddirs C:\Users\leoni\OneDrive\Dokumenter\Programmering\IntelliJ\CA-1\CA-1\dat3-startcode-master\target/endorsed" />
+>>>>>>> a50bb72e60e973f4ebc47856818fe2cfdc58af6b
     </option>
   </component>
 </project>
