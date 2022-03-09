@@ -23,7 +23,7 @@ public class FacadeTest {
     @BeforeAll
     public static void setUpClass() {
        emf = EMF_Creator.createEntityManagerFactoryForTest();
-       facade = Facade.getFacadeExample(emf);
+       facade = Facade.getFacade(emf);
     }
 
     @AfterAll
