@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="JAVA_MODULE" version="4">
-<<<<<<< HEAD
-=======
+
   <component name="FacetManager">
     <facet type="jpa" name="JPA">
       <configuration>
@@ -12,7 +11,7 @@
       </configuration>
     </facet>
   </component>
->>>>>>> a50bb72e60e973f4ebc47856818fe2cfdc58af6b
+
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$" />
