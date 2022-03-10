@@ -100,4 +100,17 @@ public class Person implements Serializable {
         }
         return false;
     }
+
+    public void addPhone(Phone phone) {
+        this.phones.add(phone);
+        phone.setPerson(this);
+    }
+
+    public List<Phone> getPhones() {
+        return phones;
+    }
+
+    public void setPhones(List<Phone> phones) {
+        this.phones = phones;
+    }
 }

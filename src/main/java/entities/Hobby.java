@@ -49,11 +49,12 @@ public class Hobby {
         this.description = description;
     }
 
+    //TODO: FIX IT!
     public void addPerson(Person person) {
-        if(!person.hasHobby(this)) {
+        //if(!person.hasHobby(this)) {
             this.persons.add(person);
-            person.addHobby(this);
-        }
+        //}
+        //person.addHobby(this);
     }
 
     public List<Person> getPersons() {
