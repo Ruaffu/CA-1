@@ -71,6 +71,7 @@ public class FacadeTest {
     {
         System.out.println("Testing getById()");
         String expected = p1.getFirstname();
+        System.out.println(p1.getId());
         String actual = facade.getById(p1.getId()).getFirstname();
         assertEquals(expected, actual);
     }
