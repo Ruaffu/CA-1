@@ -4,7 +4,6 @@ import entities.Address;
 import entities.CityInfo;
 import entities.Person;
 
-import javax.persistence.ManyToOne;
 import java.util.Set;
 
 public class AddressDTO {
@@ -27,7 +26,7 @@ public class AddressDTO {
             this.id = address.getId();
 
         this.street = address.getStreet();
-        this.additionalinfo = address.getAdditionalinfo();
+        this.additionalinfo = address.getAdditionalInfo();
         this.persons = address.getPersons();
         this.cityInfo = address.getCityInfo();
 

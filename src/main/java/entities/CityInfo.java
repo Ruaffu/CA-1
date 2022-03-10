@@ -1,20 +1,17 @@
 package entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.Set;
 
 @Entity
 public class CityInfo {
     @Id
-    @GeneratedValue
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
     private String zipcode;
     private String city;
 
-    @OneToMany(mappedBy = "cityInfo")
+    @OneToMany(mappedBy = "cityInfo", cascade = CascadeType.PERSIST)
     private Set<Address> addresses;
 
     public CityInfo() {
@@ -25,7 +22,12 @@ public class CityInfo {
         this.city = city;
     }
 
-
+    public void addAddress(Address address) {
+        if(address.getCityInfo() != this) {
+            address.setCityInfo(this);
+            this.addresses.add(address);
+        }
+    }
 
     public void setId(Long id) {
         this.id = id;
@@ -49,13 +51,6 @@ public class CityInfo {
 
     public void setCity(String city) {
         this.city = city;
-    }
-
-    public void addAddress(Address address) {
-        if(address.getCityInfo() != this) {
-            address.setCityInfo(this);
-            this.addresses.add(address);
-        }
     }
 
     public Set<Address> getAddresses() {

@@ -107,6 +107,10 @@ public class Facade {
         return CityInfoDTO.getCityInfoDTOs(cityInfos);
     }
 
+    public PersonDTO editPersonHobbies(){
+        return null;
+    }
+
 //    public AddressDTO deleteAddress(Long id){
 //        EntityManager em = emf.createEntityManager();
 //
