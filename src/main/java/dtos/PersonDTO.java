@@ -30,6 +30,7 @@ public class PersonDTO {
     private Address address;
     private Set<Hobby> hobbies;
 
+    //TODO: MAYBE DELETE LATER?
     public PersonDTO(String firstname, String lastname, String email) {
         this.firstname = firstname;
         this.lastname = lastname;
