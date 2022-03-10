@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Hobby {
@@ -15,7 +15,7 @@ public class Hobby {
     private String description;
 
     @ManyToMany
-    private List<Person> persons;
+    private Set<Person> persons;
 
     public Hobby() {
     }
@@ -49,19 +49,15 @@ public class Hobby {
         this.description = description;
     }
 
-    //TODO: FIX IT!
     public void addPerson(Person person) {
-        //if(!person.hasHobby(this)) {
-            this.persons.add(person);
-        //}
-        //person.addHobby(this);
+        person.addHobby(this);
     }
 
-    public List<Person> getPersons() {
+    public Set<Person> getPersons() {
         return persons;
     }
 
-    public void setPersons(List<Person> persons) {
+    public void setPersons(Set<Person> persons) {
         this.persons = persons;
     }
 }

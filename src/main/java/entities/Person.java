@@ -1,7 +1,9 @@
 package entities;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Set;
 import javax.persistence.*;
 
 
@@ -19,14 +21,14 @@ public class Person implements Serializable {
     private String email;
 
     @OneToMany(mappedBy = "person")
-    private List<Phone> phones;
+    private Set<Phone> phones;
 
     @ManyToOne
     @JoinColumn(name = "ADDRESS_ID")
     private Address address;
 
     @ManyToMany(mappedBy = "persons")
-    private List<Hobby> hobbies;
+    private Set<Hobby> hobbies;
 
     
     public Person() {
@@ -81,24 +83,15 @@ public class Person implements Serializable {
 
     public void addHobby(Hobby hobby) {
         this.hobbies.add(hobby);
-        hobby.addPerson(this);
+        hobby.getPersons().add(this);
     }
 
-    public List<Hobby> getHobbies() {
+    public Set<Hobby> getHobbies() {
         return hobbies;
     }
 
-    public void setHobbies(List<Hobby> hobbies) {
+    public void setHobbies(Set<Hobby> hobbies) {
         this.hobbies = hobbies;
-    }
-
-    public boolean hasHobby(Hobby hobby) {
-        for (Hobby h : hobbies) {
-            if(h.getId() == hobby.getId()) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public void addPhone(Phone phone) {
@@ -106,11 +99,11 @@ public class Person implements Serializable {
         phone.setPerson(this);
     }
 
-    public List<Phone> getPhones() {
+    public Set<Phone> getPhones() {
         return phones;
     }
 
-    public void setPhones(List<Phone> phones) {
+    public void setPhones(Set<Phone> phones) {
         this.phones = phones;
     }
 }
