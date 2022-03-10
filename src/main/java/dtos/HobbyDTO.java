@@ -4,15 +4,15 @@ import entities.Hobby;
 import entities.Person;
 
 import javax.persistence.ManyToMany;
-import java.util.List;
+import java.util.Set;
 
 public class HobbyDTO {
     private Long id;
     private String name;
     private String description;
-    private List<Person> persons;
+    private Set<Person> persons;
 
-    public HobbyDTO(String name, String description, List<Person> persons) {
+    public HobbyDTO(String name, String description, Set<Person> persons) {
         this.name = name;
         this.description = description;
         this.persons = persons;
@@ -50,11 +50,11 @@ public class HobbyDTO {
         this.description = description;
     }
 
-    public List<Person> getPersons() {
+    public Set<Person> getPersons() {
         return persons;
     }
 
-    public void setPersons(List<Person> persons) {
+    public void setPersons(Set<Person> persons) {
         this.persons = persons;
     }
 

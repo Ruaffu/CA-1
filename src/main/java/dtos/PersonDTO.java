@@ -13,7 +13,8 @@ import entities.Phone;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.List;
 
 /**
@@ -25,9 +26,9 @@ public class PersonDTO {
     private String firstname;
     private String lastname;
     private String email;
-    private List<Phone> phones;
+    private Set<Phone> phones;
     private Address address;
-    private List<Hobby> hobbies;
+    private Set<Hobby> hobbies;
 
     public PersonDTO(String firstname, String lastname, String email) {
         this.firstname = firstname;
@@ -35,7 +36,7 @@ public class PersonDTO {
         this.email = email;
     }
 
-    public PersonDTO(String firstname, String lastname, String email, List<Phone> phones, Address address, List<Hobby> hobbies) {
+    public PersonDTO(String firstname, String lastname, String email, Set<Phone> phones, Address address, Set<Hobby> hobbies) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
@@ -55,10 +56,10 @@ public class PersonDTO {
         this.hobbies = person.getHobbies();
     }
 
-    public static List<PersonDTO> getDtos(List<Person> rms){
-        List<PersonDTO> rmdtos = new ArrayList();
-        rms.forEach(rm->rmdtos.add(new PersonDTO(rm)));
-        return rmdtos;
+    public static Set<PersonDTO> getPersonDTOs(List<Person> person){
+        Set<PersonDTO> personDTOS = new HashSet<>();
+        person.forEach(p->personDTOS.add(new PersonDTO(p)));
+        return personDTOS;
     }
 
     public long getId() {
@@ -93,11 +94,11 @@ public class PersonDTO {
         this.email = email;
     }
 
-    public List<Phone> getPhones() {
+    public Set<Phone> getPhones() {
         return phones;
     }
 
-    public void setPhones(List<Phone> phones) {
+    public void setPhones(Set<Phone> phones) {
         this.phones = phones;
     }
 
@@ -109,11 +110,11 @@ public class PersonDTO {
         this.address = address;
     }
 
-    public List<Hobby> getHobbies() {
+    public Set<Hobby> getHobbies() {
         return hobbies;
     }
 
-    public void setHobbies(List<Hobby> hobbies) {
+    public void setHobbies(Set<Hobby> hobbies) {
         this.hobbies = hobbies;
     }
 

@@ -5,17 +5,17 @@ import entities.CityInfo;
 import entities.Person;
 
 import javax.persistence.ManyToOne;
-import java.util.List;
+import java.util.Set;
 
 public class AddressDTO {
     private Long id;
     private String street;
     private String additionalinfo;
-    private List<Person> persons;
+    private Set<Person> persons;
     private CityInfo cityInfo;
 
 
-    public AddressDTO(String street, String additionalinfo, List<Person> persons, CityInfo cityInfo) {
+    public AddressDTO(String street, String additionalinfo, Set<Person> persons, CityInfo cityInfo) {
         this.street = street;
         this.additionalinfo = additionalinfo;
         this.persons = persons;
@@ -57,11 +57,11 @@ public class AddressDTO {
         this.additionalinfo = additionalinfo;
     }
 
-    public List<Person> getPersons() {
+    public Set<Person> getPersons() {
         return persons;
     }
 
-    public void setPersons(List<Person> persons) {
+    public void setPersons(Set<Person> persons) {
         this.persons = persons;
     }
 

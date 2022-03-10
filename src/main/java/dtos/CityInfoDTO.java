@@ -4,15 +4,15 @@ import entities.Address;
 import entities.CityInfo;
 
 import javax.persistence.OneToMany;
-import java.util.List;
+import java.util.Set;
 
 public class CityInfoDTO {
     private Long id;
     private String zipcode;
     private String city;
-    private List<Address> addresses;
+    private Set<Address> addresses;
 
-    public CityInfoDTO(String zipcode, String city, List<Address> addresses) {
+    public CityInfoDTO(String zipcode, String city, Set<Address> addresses) {
         this.zipcode = zipcode;
         this.city = city;
         this.addresses = addresses;
@@ -50,11 +50,11 @@ public class CityInfoDTO {
         this.city = city;
     }
 
-    public List<Address> getAddresses() {
+    public Set<Address> getAddresses() {
         return addresses;
     }
 
-    public void setAddresses(List<Address> addresses) {
+    public void setAddresses(Set<Address> addresses) {
         this.addresses = addresses;
     }
 

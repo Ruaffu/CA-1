@@ -5,12 +5,13 @@ import entities.Hobby;
 import entities.Person;
 
 import java.util.List;
+import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
 
 //import errorhandling.RenameMeNotFoundException;
-import utils.EMF_Creator;
+
 
 public class Facade {
 
@@ -72,19 +73,19 @@ public class Facade {
     }
 
     //todo: check if working correct
-    public List<PersonDTO> getAll() {
+    public Set<PersonDTO> getAll() {
         EntityManager em = emf.createEntityManager();
         TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p", Person.class);
         List<Person> personList = query.getResultList();
-        return PersonDTO.getDtos(personList);
+        return PersonDTO.getPersonDTOs(personList);
     }
 
     // todo: make hobbyDTO
-    public List<PersonDTO> getPersonsByHobby(Hobby hobby){
+    public Set<PersonDTO> getPersonsByHobby(Hobby hobby){
         EntityManager em = emf.createEntityManager();
         TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p WHERE p.hobbies =:hobby", Person.class);
         query.setParameter("hobby", hobby.getName());
         List<Person> personList = query.getResultList();
-        return PersonDTO.getDtos(personList);
+        return PersonDTO.getPersonDTOs(personList);
     }
 }
