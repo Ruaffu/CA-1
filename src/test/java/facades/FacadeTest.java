@@ -1,14 +1,13 @@
 package facades;
 
+import dtos.PersonDTO;
 import entities.Person;
+import org.junit.jupiter.api.*;
 import utils.EMF_Creator;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 
 //Uncomment the line below, to temporarily disable this test
 //@Disabled
@@ -16,6 +15,8 @@ public class FacadeTest {
 
     private static EntityManagerFactory emf;
     private static Facade facade;
+    Person p1;
+    Person p2;
 
     public FacadeTest() {
     }
@@ -39,8 +40,10 @@ public class FacadeTest {
         try {
             em.getTransaction().begin();
             em.createNamedQuery("Person.deleteAllRows").executeUpdate();
-            em.persist(new Person("Some txt", "More text", "some more text"));
-            em.persist(new Person("aaa", "bbb", "ccc"));
+            p1 = new Person("Some txt", "More text", "some more text");
+            p2 = new Person("aaa", "bbb", "ccc");
+            em.persist(p1);
+            em.persist(p2);
 
             em.getTransaction().commit();
         } finally {
@@ -51,6 +54,35 @@ public class FacadeTest {
     @AfterEach
     public void tearDown() {
 //        Remove any data after each test was run
+    }
+
+    @Test
+    void testGetPersonById()
+    {
+        System.out.println("Testing getById()");
+        String expected = p1.getFirstname();
+        String actual = facade.getById(p1.getId()).getFirstname();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void testGetAllPersons()
+    {
+        System.out.println("Testing getAll()");
+        int expected = 2;
+        int actual = facade.getAll().size();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void testCreatePerson()
+    {
+        System.out.println("Testing create()");
+        PersonDTO pd1 = new PersonDTO("test", "testy","12345");
+        facade.create(pd1);
+        int expected = 3;
+        int actual = facade.getAll().size();
+        assertEquals(expected, actual);
     }
     
 
