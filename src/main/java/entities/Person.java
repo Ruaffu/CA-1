@@ -69,4 +69,35 @@ public class Person implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+        address.addPerson(this);
+    }
+
+    public void addHobby(Hobby hobby) {
+        this.hobbies.add(hobby);
+        hobby.addPerson(this);
+    }
+
+    public List<Hobby> getHobbies() {
+        return hobbies;
+    }
+
+    public void setHobbies(List<Hobby> hobbies) {
+        this.hobbies = hobbies;
+    }
+
+    public boolean hasHobby(Hobby hobby) {
+        for (Hobby h : hobbies) {
+            if(h.getId() == hobby.getId()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
