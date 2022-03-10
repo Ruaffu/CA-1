@@ -1,5 +1,6 @@
 package facades;
 
+import dtos.HobbyDTO;
 import dtos.PersonDTO;
 import entities.Hobby;
 import entities.Person;
@@ -49,9 +50,8 @@ public class Facade {
     }
 
 
-    // todo: check if it is up to date
     public PersonDTO create(PersonDTO personDTO) {
-        Person person = new Person(personDTO.getFirstname(), personDTO.getLastname(), personDTO.getEmail());
+        Person person = new Person(personDTO.getFirstname(), personDTO.getLastname(), personDTO.getEmail(), personDTO.getPhones(), personDTO.getAddress(), personDTO.getHobbies());
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
@@ -63,7 +63,7 @@ public class Facade {
         return new PersonDTO(person);
     }
 
-    // todo: check if working correct
+    // todo: create custom exception
     public PersonDTO getById(long id) { //throws RenameMeNotFoundException {
         EntityManager em = emf.createEntityManager();
         Person person = em.find(Person.class, id);
@@ -72,7 +72,6 @@ public class Facade {
         return new PersonDTO(person);
     }
 
-    //todo: check if working correct
     public Set<PersonDTO> getAll() {
         EntityManager em = emf.createEntityManager();
         TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p", Person.class);
@@ -80,12 +79,12 @@ public class Facade {
         return PersonDTO.getPersonDTOs(personList);
     }
 
-    // todo: make hobbyDTO
-    public Set<PersonDTO> getPersonsByHobby(Hobby hobby){
+
+    public Set<PersonDTO> getPersonsByHobby(HobbyDTO hobbyDTO){
         EntityManager em = emf.createEntityManager();
-        TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p WHERE p.hobbies =:hobby", Person.class);
-        query.setParameter("hobby", hobby.getName());
-        List<Person> personList = query.getResultList();
-        return PersonDTO.getPersonDTOs(personList);
+        TypedQuery<Hobby> query = em.createQuery("SELECT h FROM Hobby h WHERE h.name =:hobby", Hobby.class);
+        query.setParameter("hobby", hobbyDTO.getName());
+        Hobby hobby = query.getSingleResult();
+        return PersonDTO.getPersonDTOs(hobby.getPersons());
     }
 }

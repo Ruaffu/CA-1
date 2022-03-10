@@ -30,6 +30,7 @@ public class PersonDTO {
     private Address address;
     private Set<Hobby> hobbies;
 
+    //TODO: MAYBE DELETE LATER?
     public PersonDTO(String firstname, String lastname, String email) {
         this.firstname = firstname;
         this.lastname = lastname;
@@ -57,6 +58,12 @@ public class PersonDTO {
     }
 
     public static Set<PersonDTO> getPersonDTOs(List<Person> person){
+        Set<PersonDTO> personDTOS = new HashSet<>();
+        person.forEach(p->personDTOS.add(new PersonDTO(p)));
+        return personDTOS;
+    }
+
+    public static Set<PersonDTO> getPersonDTOs(Set<Person> person){
         Set<PersonDTO> personDTOS = new HashSet<>();
         person.forEach(p->personDTOS.add(new PersonDTO(p)));
         return personDTOS;
