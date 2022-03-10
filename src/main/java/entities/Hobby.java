@@ -48,4 +48,19 @@ public class Hobby {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public void addPerson(Person person) {
+        if(!person.hasHobby(this)) {
+            this.persons.add(person);
+            person.addHobby(this);
+        }
+    }
+
+    public List<Person> getPersons() {
+        return persons;
+    }
+
+    public void setPersons(List<Person> persons) {
+        this.persons = persons;
+    }
 }

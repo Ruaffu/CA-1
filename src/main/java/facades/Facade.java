@@ -87,13 +87,4 @@ public class Facade {
         List<Person> personList = query.getResultList();
         return PersonDTO.getDtos(personList);
     }
-
-
-    // todo: needed?
-//    public static void main(String[] args) {
-//        emf = EMF_Creator.createEntityManagerFactory();
-//        Facade fe = getFacade(emf);
-//        fe.getAll().forEach(dto -> System.out.println(dto));
-//    }
-
 }

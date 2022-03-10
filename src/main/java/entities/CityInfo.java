@@ -48,4 +48,19 @@ public class CityInfo {
     public void setCity(String city) {
         this.city = city;
     }
+
+    public void addAddress(Address address) {
+        if(address.getCityInfo() != this) {
+            address.setCityInfo(this);
+            this.addresses.add(address);
+        }
+    }
+
+    public List<Address> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(List<Address> addresses) {
+        this.addresses = addresses;
+    }
 }
