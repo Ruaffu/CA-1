@@ -6,6 +6,7 @@ import dtos.PersonDTO;
 import entities.*;
 import org.junit.jupiter.api.*;
 import utils.EMF_Creator;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
@@ -27,8 +28,8 @@ public class FacadeTest {
 
     @BeforeAll
     public static void setUpClass() {
-       emf = EMF_Creator.createEntityManagerFactoryForTest();
-       facade = Facade.getFacade(emf);
+        emf = EMF_Creator.createEntityManagerFactoryForTest();
+        facade = Facade.getFacade(emf);
     }
 
     @AfterAll
@@ -44,9 +45,9 @@ public class FacadeTest {
         try {
             em.getTransaction().begin();
             em.createNamedQuery("Person.deleteAllRows").executeUpdate();
-            p1 = new Person("Some txt", "More text", "some more text", new HashSet<>(),new Address("Chr. den 8. vej", "", new CityInfo("8600", "Silkeborg")), new HashSet<>());
-            p1.addPhone(new Phone("12345678","fastnet"));
-            Hobby h =new Hobby("fodbold", "spark", new HashSet<>());
+            p1 = new Person("Some txt", "More text", "some more text", new HashSet<>(), new Address("Chr. den 8. vej", "", new CityInfo("8600", "Silkeborg")), new HashSet<>());
+            p1.addPhone(new Phone("12345678", "fastnet"));
+            Hobby h = new Hobby("fodbold", "spark", new HashSet<>());
             p1.addHobby(h);
 
             p2 = new Person("aaa", "bbb", "ccc");
@@ -68,8 +69,7 @@ public class FacadeTest {
     }
 
     @Test
-    void testGetPersonById()
-    {
+    void testGetPersonById() {
         System.out.println("Testing getById()");
         String expected = p1.getFirstname();
         System.out.println(p1.getId());
@@ -78,8 +78,7 @@ public class FacadeTest {
     }
 
     @Test
-    void testGetAllPersons()
-    {
+    void testGetAllPersons() {
         System.out.println("Testing getAll()");
         int expected = 2;
         int actual = facade.getAll().size();
@@ -87,10 +86,9 @@ public class FacadeTest {
     }
 
     @Test
-    void testCreatePerson()
-    {
+    void testCreatePerson() {
         System.out.println("Testing create()");
-        PersonDTO pd1 = new PersonDTO("test", "testy","12345");
+        PersonDTO pd1 = new PersonDTO("test", "testy", "12345");
         facade.create(pd1);
         int expected = 3;
         int actual = facade.getAll().size();
@@ -100,7 +98,7 @@ public class FacadeTest {
     @Test
     void testGetPersonsByHobby() {
         System.out.println("Testing PersonsByHobby()");
-        HobbyDTO hobbyDTO = new HobbyDTO("fodbold","spark",new HashSet<>());
+        HobbyDTO hobbyDTO = new HobbyDTO("fodbold", "spark", new HashSet<>());
         hobbyDTO.getPersons().add(p1);
         int expected = 1;
         int actual = facade.getPersonsByHobby(hobbyDTO).size();
@@ -108,7 +106,7 @@ public class FacadeTest {
     }
 
     @Test
-    void testGetPersonsByZipcode(){
+    void testGetPersonsByZipcode() {
         System.out.println("Testing getPersonByZip()");
         int expected = 1;
         int actual = facade.getAllPersonsByZip("8600").size();
@@ -124,7 +122,17 @@ public class FacadeTest {
         assertEquals(expected, actual);
     }
 
-//    @Test
+    @Test
+    void testEditPerson() {
+        System.out.println("Testing editPerson()");
+
+        String expected = "bob";
+        p1.setFirstname("bob");
+        String actual = facade.editPerson(new PersonDTO(p1)).getFirstname();
+        assertEquals(expected, actual);
+    }
+
+    //    @Test
 //    void testDeleteAddress() {
 //        System.out.println("Testing deleteAddress()");
 //        int expected = 0;

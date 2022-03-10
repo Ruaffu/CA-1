@@ -107,9 +107,28 @@ public class Facade {
         return CityInfoDTO.getCityInfoDTOs(cityInfos);
     }
 
-    public PersonDTO editPersonHobbies(){
-        return null;
+    public PersonDTO editPerson(PersonDTO personDTO){
+        EntityManager em = emf.createEntityManager();
+
+        Person person = em.find(Person.class, personDTO.getId());
+        person.setFirstname(personDTO.getFirstname());
+        person.setLastname(personDTO.getLastname());
+        person.setAddress(personDTO.getAddress());
+        person.setEmail(personDTO.getEmail());
+        person.setHobbies(personDTO.getHobbies());
+        person.setPhones(personDTO.getPhones());
+        try {
+            em.getTransaction().begin();
+            em.merge(person);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+
+        return new PersonDTO(person);
     }
+
+
 
 //    public AddressDTO deleteAddress(Long id){
 //        EntityManager em = emf.createEntityManager();
