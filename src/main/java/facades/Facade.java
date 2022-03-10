@@ -1,8 +1,10 @@
 package facades;
 
+import dtos.AddressDTO;
 import dtos.CityInfoDTO;
 import dtos.HobbyDTO;
 import dtos.PersonDTO;
+import entities.Address;
 import entities.CityInfo;
 import entities.Hobby;
 import entities.Person;
@@ -27,9 +29,9 @@ public class Facade {
 
     /* todo: Get the all people with a given hobby: Done
         Get all persons living in a given city (i.e. 2800 Lyngby): Done
-        Get a list of all zip codes in Denmark Done
-        Create a Person (with hobbies, phone, address etc.)
-        Delete an address
+        Get a list of all zip codes in Denmark: Done
+        Create a Person (with hobbies, phone, address etc.): Done
+        Delete an address: method no working, problem with foreign keys
         Edit a Person to change hobbies and phone numbers etc.
      */
 
@@ -104,4 +106,28 @@ public class Facade {
         List<CityInfo> cityInfos = query.getResultList();
         return CityInfoDTO.getCityInfoDTOs(cityInfos);
     }
+
+//    public AddressDTO deleteAddress(Long id){
+//        EntityManager em = emf.createEntityManager();
+//
+////        address.getPersons().forEach( (person -> {
+////            person.setAddress(new Address("123", ""));
+////            em.merge(person);
+////        }));
+////
+////        address.setPersons(null);
+//
+//
+//        Address address = null;
+//        try {
+//            em.getTransaction().begin();
+//            address = em.find(Address.class, id);
+//            em.remove(address);
+//            em.getTransaction().commit();
+//        } finally {
+//            em.close();
+//        }
+//
+//        return new AddressDTO(address);
+//    }
 }

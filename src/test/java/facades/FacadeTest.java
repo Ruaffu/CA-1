@@ -1,5 +1,6 @@
 package facades;
 
+import dtos.AddressDTO;
 import dtos.HobbyDTO;
 import dtos.PersonDTO;
 import entities.*;
@@ -108,7 +109,7 @@ public class FacadeTest {
 
     @Test
     void testGetPersonsByZipcode(){
-        System.out.println("Testing getPersosnByZip()");
+        System.out.println("Testing getPersonByZip()");
         int expected = 1;
         int actual = facade.getAllPersonsByZip("8600").size();
         System.out.println(facade.getAllPersonsByZip("8600").iterator().next().getFirstname());
@@ -122,4 +123,14 @@ public class FacadeTest {
         int actual = facade.getAllCityInfos().size();
         assertEquals(expected, actual);
     }
+
+//    @Test
+//    void testDeleteAddress() {
+//        System.out.println("Testing deleteAddress()");
+//        int expected = 0;
+//        System.out.println(facade.deleteAddress(1L));
+//
+//        int actual = facade.getAllPersonsByZip("8600").size();
+//        assertEquals(expected, actual);
+//    }
 }

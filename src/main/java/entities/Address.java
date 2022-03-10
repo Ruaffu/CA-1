@@ -1,21 +1,22 @@
 package entities;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 public class Address {
     @Id
-    @GeneratedValue
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String street;
     private String additionalinfo;
 
-    @OneToMany(mappedBy = "address")
-    private Set<Person> persons;
+    @OneToMany(mappedBy = "address", fetch = FetchType.LAZY, orphanRemoval = true)
+    private Set<Person> persons = new HashSet<>();
 
-    @ManyToOne (cascade = CascadeType.PERSIST)
+    @ManyToOne (cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private CityInfo cityInfo;
 
     public Address() {
@@ -24,6 +25,14 @@ public class Address {
     public Address(String street, String additionalInfo) {
         this.street = street;
         this.additionalinfo = additionalInfo;
+    }
+
+    public Address(Long id, String street, String additionalinfo, Set<Person> persons, CityInfo cityInfo) {
+        this.id = id;
+        this.street = street;
+        this.additionalinfo = additionalinfo;
+        this.persons = persons;
+        this.cityInfo = cityInfo;
     }
 
     public Address(String street, String additionalinfo, CityInfo cityInfo) {
