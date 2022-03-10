@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 public class CityInfo {
@@ -15,7 +15,7 @@ public class CityInfo {
     private String city;
 
     @OneToMany(mappedBy = "cityInfo")
-    private List<Address> addresses;
+    private Set<Address> addresses;
 
     public CityInfo() {
     }
@@ -56,11 +56,11 @@ public class CityInfo {
         }
     }
 
-    public List<Address> getAddresses() {
+    public Set<Address> getAddresses() {
         return addresses;
     }
 
-    public void setAddresses(List<Address> addresses) {
+    public void setAddresses(Set<Address> addresses) {
         this.addresses = addresses;
     }
 }

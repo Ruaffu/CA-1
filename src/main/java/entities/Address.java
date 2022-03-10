@@ -1,7 +1,7 @@
 package entities;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Address {
@@ -13,7 +13,7 @@ public class Address {
     private String additionalinfo;
 
     @OneToMany(mappedBy = "address")
-    private List<Person> persons;
+    private Set<Person> persons;
 
     @ManyToOne()
     private CityInfo cityInfo;
@@ -57,11 +57,11 @@ public class Address {
         }
     }
 
-    public List<Person> getPersons() {
+    public Set<Person> getPersons() {
         return persons;
     }
 
-    public void setPersons(List<Person> persons) {
+    public void setPersons(Set<Person> persons) {
         this.persons = persons;
     }
 
