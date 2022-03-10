@@ -1,0 +1,10 @@
+errorhandling\GenericExceptionMapper.class
+dtos\PersonDTO.class
+facades\FacadeExample.class
+utils\Utility.class
+rest\ApplicationConfig.class
+facades\Populator.class
+errorhandling\ExceptionDTO.class
+entities\Person.class
+utils\EMF_Creator.class
+rest\PersonResource.class
