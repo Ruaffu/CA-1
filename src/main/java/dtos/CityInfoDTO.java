@@ -2,8 +2,11 @@ package dtos;
 
 import entities.Address;
 import entities.CityInfo;
+import entities.Person;
 
 import javax.persistence.OneToMany;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class CityInfoDTO {
@@ -24,6 +27,12 @@ public class CityInfoDTO {
         this.zipcode = cityInfo.getZipcode();
         this.city = cityInfo.getCity();
         this.addresses = cityInfo.getAddresses();
+    }
+
+    public static Set<CityInfoDTO> getCityInfoDTOs(List<CityInfo> cityInfos){
+        Set<CityInfoDTO> cityInfoDTOs = new HashSet<>();
+        cityInfos.forEach(c->cityInfoDTOs.add(new CityInfoDTO(c)));
+        return cityInfoDTOs;
     }
 
     public Long getId() {

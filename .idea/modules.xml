@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/CA-1.iml" filepath="$PROJECT_DIR$/.idea/CA-1.iml" />
       <module fileurl="file://$PROJECT_DIR$/CA1.iml" filepath="$PROJECT_DIR$/CA1.iml" />
       <module fileurl="file://$PROJECT_DIR$/dat3-startcode-master/devops-starter.iml" filepath="$PROJECT_DIR$/dat3-startcode-master/devops-starter.iml" />
     </modules>

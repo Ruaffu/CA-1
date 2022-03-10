@@ -113,4 +113,12 @@ public class FacadeTest {
         System.out.println(facade.getAllPersonsByZip("8600").iterator().next().getFirstname());
         assertEquals(expected, actual);
     }
+
+    @Test
+    void testGetAllCityInfos() {
+        System.out.println("Testing getAllCityInfos()");
+        int expected = 1;
+        int actual = facade.getAllCityInfos().size();
+        assertEquals(expected, actual);
+    }
 }
