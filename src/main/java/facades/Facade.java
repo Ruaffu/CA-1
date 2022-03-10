@@ -31,7 +31,7 @@ public class Facade {
         Get all persons living in a given city (i.e. 2800 Lyngby): Done
         Get a list of all zip codes in Denmark: Done
         Create a Person (with hobbies, phone, address etc.): Done
-        Delete an address:
+        Delete an address: method no working, problem with foreign keys
         Edit a Person to change hobbies and phone numbers etc.
      */
 
@@ -107,22 +107,27 @@ public class Facade {
         return CityInfoDTO.getCityInfoDTOs(cityInfos);
     }
 
-    public AddressDTO deleteAddress(Long id){
-        EntityManager em = emf.createEntityManager();
-        Address address = em.find(Address.class, id);
-
-        System.out.println(address);
-
-        em.getTransaction().begin();
-        address.getPersons().forEach( (person -> {
-            person.setAddress(new Address("123", ""));
-            em.merge(person);
-        }));
-
-        em.merge(address);
-        em.remove(address);
-        em.getTransaction().commit();
-
-        return new AddressDTO(address);
-    }
+//    public AddressDTO deleteAddress(Long id){
+//        EntityManager em = emf.createEntityManager();
+//
+////        address.getPersons().forEach( (person -> {
+////            person.setAddress(new Address("123", ""));
+////            em.merge(person);
+////        }));
+////
+////        address.setPersons(null);
+//
+//
+//        Address address = null;
+//        try {
+//            em.getTransaction().begin();
+//            address = em.find(Address.class, id);
+//            em.remove(address);
+//            em.getTransaction().commit();
+//        } finally {
+//            em.close();
+//        }
+//
+//        return new AddressDTO(address);
+//    }
 }

@@ -1,19 +1,20 @@
 package entities;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 public class Address {
     @Id
-    @GeneratedValue
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String street;
     private String additionalinfo;
 
     @OneToMany(mappedBy = "address", fetch = FetchType.LAZY, orphanRemoval = true)
-    private Set<Person> persons;
+    private Set<Person> persons = new HashSet<>();
 
     @ManyToOne (cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private CityInfo cityInfo;
