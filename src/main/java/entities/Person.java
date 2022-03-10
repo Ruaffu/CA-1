@@ -91,11 +91,9 @@ public class Person implements Serializable {
     }
 
     public void addHobby(Hobby hobby) {
-        System.out.println(hobby.getName());
         this.hobbies.add(hobby);
-        System.out.println(hobbies.iterator().next().getName());
         hobby.getPersons().add(this);
-        System.out.println(hobby.getPersons().iterator().next().hobbies.iterator().next().getName());
+
     }
 
     public Set<Hobby> getHobbies() {

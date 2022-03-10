@@ -104,4 +104,13 @@ public class FacadeTest {
         int actual = facade.getPersonsByHobby(hobbyDTO).size();
         assertEquals(expected, actual);
     }
+
+    @Test
+    void testGetPersonsByZipcode(){
+        System.out.println("Testing getPersosnByZip()");
+        int expected = 1;
+        int actual = facade.getAllPersonsByZip("8600").size();
+        System.out.println(facade.getAllPersonsByZip("8600").iterator().next().getFirstname());
+        assertEquals(expected, actual);
+    }
 }

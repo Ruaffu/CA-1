@@ -2,6 +2,7 @@ package facades;
 
 import dtos.HobbyDTO;
 import dtos.PersonDTO;
+import entities.CityInfo;
 import entities.Hobby;
 import entities.Person;
 
@@ -23,9 +24,8 @@ public class Facade {
     private Facade() {
     }
 
-    /* todo: Get all persons with a given hobby,
+    /* todo: Get the all people with a given hobby: Done
         Get all persons living in a given city (i.e. 2800 Lyngby)
-        Get the all people with a given hobby
         Get a list of all zip codes in Denmark
         Create a Person (with hobbies, phone, address etc.)
         Delete an address
@@ -86,5 +86,14 @@ public class Facade {
         query.setParameter("hobby", hobbyDTO.getName());
         Hobby hobby = query.getSingleResult();
         return PersonDTO.getPersonDTOs(hobby.getPersons());
+    }
+
+    //Get all persons living in a given city (i.e. 2800 Lyngby)
+    public Set<PersonDTO> getAllPersonsByZip(String zipcode){
+        EntityManager em = emf.createEntityManager();
+        TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p JOIN Address a ON p.address.id = a.id WHERE a.cityInfo.zipcode =:zipcode", Person.class);
+        query.setParameter("zipcode",zipcode);
+        List<Person> people = query.getResultList();
+        return PersonDTO.getPersonDTOs(people);
     }
 }
