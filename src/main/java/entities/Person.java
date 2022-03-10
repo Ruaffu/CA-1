@@ -81,7 +81,7 @@ public class Person implements Serializable {
 
     public void addHobby(Hobby hobby) {
         this.hobbies.add(hobby);
-        hobby.addPerson(this);
+        hobby.getPersons().add(this);
     }
 
     public List<Hobby> getHobbies() {
