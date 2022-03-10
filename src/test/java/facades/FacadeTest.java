@@ -1,11 +1,14 @@
 package facades;
 
+import dtos.HobbyDTO;
 import dtos.PersonDTO;
-import entities.Person;
+import entities.*;
 import org.junit.jupiter.api.*;
 import utils.EMF_Creator;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+
+import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -40,8 +43,15 @@ public class FacadeTest {
         try {
             em.getTransaction().begin();
             em.createNamedQuery("Person.deleteAllRows").executeUpdate();
-            p1 = new Person("Some txt", "More text", "some more text");
+            p1 = new Person("Some txt", "More text", "some more text", new HashSet<>(),new Address("Chr. den 8. vej", "", new CityInfo("8600", "Silkeborg")), new HashSet<>());
+            p1.addPhone(new Phone("12345678","fastnet"));
+            Hobby h =new Hobby("fodbold", "spark", new HashSet<>());
+            p1.addHobby(h);
+
             p2 = new Person("aaa", "bbb", "ccc");
+
+            em.persist(h);
+
             em.persist(p1);
             em.persist(p2);
 
@@ -84,6 +94,14 @@ public class FacadeTest {
         int actual = facade.getAll().size();
         assertEquals(expected, actual);
     }
-    
 
+    @Test
+    void testGetPersonsByHobby() {
+        System.out.println("Testing PersonsByHobby()");
+        HobbyDTO hobbyDTO = new HobbyDTO("fodbold","spark",new HashSet<>());
+        hobbyDTO.getPersons().add(p1);
+        int expected = 1;
+        int actual = facade.getPersonsByHobby(hobbyDTO).size();
+        assertEquals(expected, actual);
+    }
 }

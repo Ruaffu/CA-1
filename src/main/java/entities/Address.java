@@ -15,15 +15,21 @@ public class Address {
     @OneToMany(mappedBy = "address")
     private Set<Person> persons;
 
-    @ManyToOne()
+    @ManyToOne (cascade = CascadeType.PERSIST)
     private CityInfo cityInfo;
 
     public Address() {
     }
 
-    public Address(String street, String additionalinfo) {
+    public Address(String street, String additionalInfo) {
+        this.street = street;
+        this.additionalinfo = additionalInfo;
+    }
+
+    public Address(String street, String additionalinfo, CityInfo cityInfo) {
         this.street = street;
         this.additionalinfo = additionalinfo;
+        this.cityInfo = cityInfo;
     }
 
     public void setId(Long id) {

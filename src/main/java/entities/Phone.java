@@ -5,7 +5,7 @@ import javax.persistence.*;
 @Entity
 public class Phone {
     @Id
-    @GeneratedValue
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
     private String number;
     private String description;
@@ -20,6 +20,12 @@ public class Phone {
     public Phone(String number, String description) {
         this.number = number;
         this.description = description;
+    }
+
+    public Phone(String number, String description, Person person) {
+        this.number = number;
+        this.description = description;
+        this.person = person;
     }
 
     public void setId(Long id) {

@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -23,6 +24,12 @@ public class Hobby {
     public Hobby(String name, String description) {
         this.name = name;
         this.description = description;
+    }
+
+    public Hobby(String name, String description, Set<Person> persons) {
+        this.name = name;
+        this.description = description;
+        this.persons = persons;
     }
 
     public void setId(Long id) {

@@ -20,10 +20,10 @@ public class Person implements Serializable {
     private String lastname;
     private String email;
 
-    @OneToMany(mappedBy = "person")
+    @OneToMany(mappedBy = "person", cascade = CascadeType.PERSIST)
     private Set<Phone> phones;
 
-    @ManyToOne
+    @ManyToOne (cascade = CascadeType.PERSIST)
     @JoinColumn(name = "ADDRESS_ID")
     private Address address;
 
@@ -38,6 +38,15 @@ public class Person implements Serializable {
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
+    }
+
+    public Person(String firstname, String lastname, String email, Set<Phone> phones, Address address, Set<Hobby> hobbies) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+        this.phones = phones;
+        this.address = address;
+        this.hobbies = hobbies;
     }
 
     public Long getId() {
@@ -82,8 +91,11 @@ public class Person implements Serializable {
     }
 
     public void addHobby(Hobby hobby) {
+        System.out.println(hobby.getName());
         this.hobbies.add(hobby);
+        System.out.println(hobbies.iterator().next().getName());
         hobby.getPersons().add(this);
+        System.out.println(hobby.getPersons().iterator().next().hobbies.iterator().next().getName());
     }
 
     public Set<Hobby> getHobbies() {

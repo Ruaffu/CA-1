@@ -25,6 +25,8 @@ public class CityInfo {
         this.city = city;
     }
 
+
+
     public void setId(Long id) {
         this.id = id;
     }

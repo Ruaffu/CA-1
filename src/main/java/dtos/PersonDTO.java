@@ -63,6 +63,12 @@ public class PersonDTO {
         return personDTOS;
     }
 
+    public static Set<PersonDTO> getPersonDTOs(Set<Person> person){
+        Set<PersonDTO> personDTOS = new HashSet<>();
+        person.forEach(p->personDTOS.add(new PersonDTO(p)));
+        return personDTOS;
+    }
+
     public long getId() {
         return id;
     }
