@@ -12,10 +12,10 @@ public class Address {
     private String street;
     private String additionalinfo;
 
-    @OneToMany(mappedBy = "address")
+    @OneToMany(mappedBy = "address", fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<Person> persons;
 
-    @ManyToOne (cascade = CascadeType.PERSIST)
+    @ManyToOne (cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private CityInfo cityInfo;
 
     public Address() {
@@ -24,6 +24,14 @@ public class Address {
     public Address(String street, String additionalInfo) {
         this.street = street;
         this.additionalinfo = additionalInfo;
+    }
+
+    public Address(Long id, String street, String additionalinfo, Set<Person> persons, CityInfo cityInfo) {
+        this.id = id;
+        this.street = street;
+        this.additionalinfo = additionalinfo;
+        this.persons = persons;
+        this.cityInfo = cityInfo;
     }
 
     public Address(String street, String additionalinfo, CityInfo cityInfo) {

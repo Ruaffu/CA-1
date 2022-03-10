@@ -1,8 +1,10 @@
 package facades;
 
+import dtos.AddressDTO;
 import dtos.CityInfoDTO;
 import dtos.HobbyDTO;
 import dtos.PersonDTO;
+import entities.Address;
 import entities.CityInfo;
 import entities.Hobby;
 import entities.Person;
@@ -27,9 +29,9 @@ public class Facade {
 
     /* todo: Get the all people with a given hobby: Done
         Get all persons living in a given city (i.e. 2800 Lyngby): Done
-        Get a list of all zip codes in Denmark Done
-        Create a Person (with hobbies, phone, address etc.)
-        Delete an address
+        Get a list of all zip codes in Denmark: Done
+        Create a Person (with hobbies, phone, address etc.): Done
+        Delete an address:
         Edit a Person to change hobbies and phone numbers etc.
      */
 
@@ -103,5 +105,24 @@ public class Facade {
         TypedQuery<CityInfo> query = em.createQuery("SELECT c FROM CityInfo c", CityInfo.class);
         List<CityInfo> cityInfos = query.getResultList();
         return CityInfoDTO.getCityInfoDTOs(cityInfos);
+    }
+
+    public AddressDTO deleteAddress(Long id){
+        EntityManager em = emf.createEntityManager();
+        Address address = em.find(Address.class, id);
+
+        System.out.println(address);
+
+        em.getTransaction().begin();
+        address.getPersons().forEach( (person -> {
+            person.setAddress(new Address("123", ""));
+            em.merge(person);
+        }));
+
+        em.merge(address);
+        em.remove(address);
+        em.getTransaction().commit();
+
+        return new AddressDTO(address);
     }
 }
