@@ -10,7 +10,7 @@ public class Phone {
     private String number;
     private String description;
 
-    @ManyToOne
+    @ManyToOne (cascade = CascadeType.PERSIST)
     @JoinColumn(name = "PERSON_ID")
     private Person person;
 

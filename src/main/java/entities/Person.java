@@ -49,6 +49,17 @@ public class Person implements Serializable {
         this.hobbies = hobbies;
     }
 
+    public void setAddress(Address address) {
+        this.address = address;
+        address.addPerson(this);
+    }
+
+    public void addHobby(Hobby hobby) {
+        this.hobbies.add(hobby);
+        hobby.getPersons().add(this);
+
+    }
+
     public Long getId() {
         return id;
     }
@@ -83,17 +94,6 @@ public class Person implements Serializable {
 
     public Address getAddress() {
         return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-        address.addPerson(this);
-    }
-
-    public void addHobby(Hobby hobby) {
-        this.hobbies.add(hobby);
-        hobby.getPersons().add(this);
-
     }
 
     public Set<Hobby> getHobbies() {

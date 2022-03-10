@@ -1,21 +1,18 @@
 package entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
 
 @Entity
 public class Hobby {
     @Id
-    @GeneratedValue
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String description;
 
-    @ManyToMany
+    @ManyToMany (cascade = CascadeType.PERSIST)
     private Set<Person> persons;
 
     public Hobby() {
