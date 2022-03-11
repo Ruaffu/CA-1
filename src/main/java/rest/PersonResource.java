@@ -30,10 +30,9 @@ public class PersonResource {
     }
 
 
-    //TODO: getPersonByHobby,
-    // getAllpersonbyzipcode,
+    //TODO:
     // editperson, createperson,
-    // getpersonbyphonenumber, deletepersonbyid, getbyid
+    // getpersonbyphonenumber, deletepersonbyid
 
     @GET
     @Path("/{id}")
@@ -66,12 +65,22 @@ public class PersonResource {
     }
 
     @GET
-    @Path("zipcode/{zipcode}")
+    @Path("/zipcode/{zipcode}")
     @Produces({MediaType.APPLICATION_JSON})
     public Response getPersonsByZipcode(@PathParam("zipcode") String zipcode) {
         return Response
                 .ok()
                 .entity(GSON.toJson(FACADE.getAllPersonsByZip(zipcode)))
+                .build();
+    }
+
+    @GET
+    @Path("phone/{phone}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getPersonsByPhone(@PathParam("phone") String phone) {
+        return Response
+                .ok()
+                .entity(GSON.toJson(FACADE.getPersonByPhoneNumber(phone)))
                 .build();
     }
 
