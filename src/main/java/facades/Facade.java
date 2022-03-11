@@ -144,6 +144,13 @@ public class Facade {
         return personDTO;
     }
 
+    public Set<HobbyDTO> getAllHobbies(){
+        EntityManager em = emf.createEntityManager();
+        TypedQuery<Hobby> query = em.createQuery("SELECT h FROM Hobby h", Hobby.class);
+        List<Hobby> hobbyList = query.getResultList();
+        return HobbyDTO.getHobbyDTOs(hobbyList);
+    }
+
 //    public PersonDTO deletePersonByID(long id){
 //        EntityManager em = getEntityManager();
 //        Person person = em.find(Person.class, id);

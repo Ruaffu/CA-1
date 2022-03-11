@@ -4,6 +4,8 @@ import entities.Hobby;
 import entities.Person;
 
 import javax.persistence.ManyToMany;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class HobbyDTO {
@@ -24,6 +26,12 @@ public class HobbyDTO {
         this.name = hobby.getName();
         this.description = hobby.getDescription();
         this.persons = hobby.getPersons();
+    }
+
+    public static Set<HobbyDTO> getHobbyDTOs(List<Hobby> hobbies){
+        Set<HobbyDTO> hobbyDTOS = new HashSet<>();
+        hobbies.forEach(h->hobbyDTOS.add(new HobbyDTO(h)));
+        return hobbyDTOS;
     }
 
     public Long getId() {

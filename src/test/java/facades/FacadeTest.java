@@ -174,4 +174,12 @@ public class FacadeTest {
 //        assertEquals(expected, actual);
 //
 //    }
+
+    @Test
+    void testGetAllHobbies(){
+        System.out.println("Testing getAllHobbies()");
+        int expected = 1;
+        int actual = facade.getAllHobbies().size();;
+        assertEquals(expected, actual);
+    }
 }
