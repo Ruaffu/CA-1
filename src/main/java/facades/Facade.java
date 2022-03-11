@@ -1,6 +1,5 @@
 package facades;
 
-import dtos.AddressDTO;
 import dtos.CityInfoDTO;
 import dtos.HobbyDTO;
 import dtos.PersonDTO;
@@ -107,6 +106,7 @@ public class Facade {
         return CityInfoDTO.getCityInfoDTOs(cityInfos);
     }
 
+    // todo: check for changed data
     public PersonDTO editPerson(PersonDTO personDTO){
         EntityManager em = emf.createEntityManager();
 
@@ -151,20 +151,32 @@ public class Facade {
         return HobbyDTO.getHobbyDTOs(hobbyList);
     }
 
-//    public PersonDTO deletePersonByID(long id){
-//        EntityManager em = getEntityManager();
-//        Person person = em.find(Person.class, id);
-//        try
-//        {
-//            em.getTransaction().begin();
-//            em.remove(person);
-//            em.getTransaction().commit();
-//        }finally
-//        {
-//            em.close();
-//        }
-//        return new PersonDTO(person);
-//    }
+    public PersonDTO deletePersonByID(long id){
+        EntityManager em = getEntityManager();
+        Person person = em.find(Person.class, id);
+        try
+        {
+            em.getTransaction().begin();
+
+            // removes phone numbers
+            person.getPhones().forEach(phone -> {
+                em.remove(phone);
+            });
+
+            // removes address, if it's the only one living there.
+            Address addressToRemove = em.find(Address.class, person.getAddress().getId());
+            if (addressToRemove.getPersons().size() <= 1){
+                em.remove(addressToRemove);
+            }
+
+            em.remove(person);
+            em.getTransaction().commit();
+        }finally
+        {
+            em.close();
+        }
+        return new PersonDTO(person);
+    }
 
 //    public AddressDTO deleteAddress(Long id){
 //        EntityManager em = emf.createEntityManager();

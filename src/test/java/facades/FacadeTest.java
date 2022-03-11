@@ -58,8 +58,6 @@ public class FacadeTest {
             p2.addPhone(new Phone("87654321", "mobile"));
             p2.addHobby(h1);
 
-            em.persist(h1);
-
             em.persist(p1);
             em.persist(p2);
 
@@ -149,7 +147,7 @@ public class FacadeTest {
 //    }
 
     @Test
-    void testGEtNumberOfPeopleWithGivenHobby(){
+    void testGetNumberOfPeopleWithGivenHobby(){
         System.out.println("Testing getNumberOfPeopleWithAHobby()");
         int expected = 2;
         int actual = facade.getNumberOfPeopleWithAHobby("fodbold");
@@ -164,16 +162,16 @@ public class FacadeTest {
         assertEquals(expected, actual);
     }
 
-//    @Test
-//    void testDeletePersonById(){
-//        System.out.println("Testing deletePersonById()");
-//        int expected = 1;
-//        PersonDTO deletedPerson = facade.deletePersonByID(p1.getId());
-//        int actual = facade.getAll().size();
-//        System.out.println(deletedPerson.getFirstname());
-//        assertEquals(expected, actual);
-//
-//    }
+    @Test
+    void testDeletePersonById(){
+        System.out.println("Testing deletePersonById()");
+        int expected = 1;
+        PersonDTO deletedPerson = facade.deletePersonByID(p1.getId());
+        int actual = facade.getAll().size();
+        System.out.println(deletedPerson.getFirstname());
+        assertEquals(expected, actual);
+
+    }
 
     @Test
     void testGetAllHobbies(){
