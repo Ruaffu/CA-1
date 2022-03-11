@@ -1,11 +1,7 @@
 package dtos;
 
 import entities.Address;
-import entities.CityInfo;
-import entities.Person;
 
-import java.util.Set;
-// todo: make persons, cityinfo into strings...
 public class AddressDTO {
     private Long id;
     private String street;

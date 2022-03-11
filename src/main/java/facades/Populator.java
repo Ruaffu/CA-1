@@ -26,13 +26,14 @@ public class Populator {
         Person person2 = new Person("First 2", "Last 2", "Email 2");
         Person person3 = new Person("First 3", "Last 3", "Email 3");
 
-        Address address = new Address("street 1",  "", new CityInfo("8600", "silkeborg"));
+        Address address = new Address("street 1",  "", new CityInfo("7400", "Herning"));
 
         person1.setAddress(address);
         person2.setAddress(address);
         person3.setAddress(address);
 
         person1.addHobby(new Hobby("fodbold", "Spark"));
+        person1.addPhone(new Phone("1234", "Home"));
 
         PersonDTO p1 = new PersonDTO(person1);
         PersonDTO p2 = new PersonDTO(person2);

@@ -1,32 +1,20 @@
 package dtos;
 
-import entities.Address;
 import entities.CityInfo;
-import entities.Person;
 
-import javax.persistence.OneToMany;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-// todo: make addresses into string...
 public class CityInfoDTO {
     private Long id;
     private String zipcode;
     private String city;
-    private Set<Address> addresses;
-
-    public CityInfoDTO(String zipcode, String city, Set<Address> addresses) {
-        this.zipcode = zipcode;
-        this.city = city;
-        this.addresses = addresses;
-    }
 
     public CityInfoDTO(CityInfo cityInfo) {
         if(cityInfo.getId() != null)
             this.id = cityInfo.getId();
         this.zipcode = cityInfo.getZipcode();
         this.city = cityInfo.getCity();
-        this.addresses = cityInfo.getAddresses();
     }
 
     public static Set<CityInfoDTO> getCityInfoDTOs(List<CityInfo> cityInfos){
@@ -59,21 +47,12 @@ public class CityInfoDTO {
         this.city = city;
     }
 
-    public Set<Address> getAddresses() {
-        return addresses;
-    }
-
-    public void setAddresses(Set<Address> addresses) {
-        this.addresses = addresses;
-    }
-
     @Override
     public String toString() {
         return "CityInfoDTO{" +
                 "id=" + id +
                 ", zipcode='" + zipcode + '\'' +
                 ", city='" + city + '\'' +
-                ", addresses=" + addresses +
                 '}';
     }
 }

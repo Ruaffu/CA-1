@@ -3,10 +3,7 @@ package facades;
 import dtos.CityInfoDTO;
 import dtos.HobbyDTO;
 import dtos.PersonDTO;
-import entities.Address;
-import entities.CityInfo;
-import entities.Hobby;
-import entities.Person;
+import entities.*;
 
 import java.util.List;
 import java.util.Set;
@@ -26,12 +23,9 @@ public class Facade {
     private Facade() {
     }
 
-    /* todo: Get the all people with a given hobby: Done
-        Get all persons living in a given city (i.e. 2800 Lyngby): Done
-        Get a list of all zip codes in Denmark: Done
-        Create a Person (with hobbies, phone, address etc.): Done
-        Delete an address: method no working, problem with foreign keys
-        Edit a Person to change hobbies and phone numbers etc.
+    /* todo: Delete an address: method no working, problem with foreign keys
+             remake: Edit a Person to change hobbies and phone numbers etc.
+             make custom exception, example not valid data, or missing data
      */
 
 
@@ -51,7 +45,7 @@ public class Facade {
         return emf.createEntityManager();
     }
 
-
+    // todo: check if address, phone, hobby already exists
     public PersonDTO create(PersonDTO personDTO) {
         Person person = new Person(personDTO.getFirstname(), personDTO.getLastname(), personDTO.getEmail());
         EntityManager em = getEntityManager();
@@ -63,6 +57,10 @@ public class Facade {
 
             personDTO.getHobbies().forEach(hobbyDTO -> {
                 person.addHobby(new Hobby(hobbyDTO.getName(), hobbyDTO.getDescription()));
+            });
+
+            personDTO.getPhones().forEach(phoneDTO -> {
+                person.addPhone(new Phone(phoneDTO.getNumber(), phoneDTO.getDescription()));
             });
 
             em.persist(person);
@@ -114,12 +112,14 @@ public class Facade {
         return CityInfoDTO.getCityInfoDTOs(cityInfos);
     }
 
-    // todo: check for changed data
+    // todo: remake method
+    //  so that it works with DTO,
+    //  checks for already existing data,
+    //  and remove not used data from DB
     public PersonDTO editPerson(PersonDTO personDTO){
         EntityManager em = emf.createEntityManager();
 
         Person person = em.find(Person.class, personDTO.getId());
-
         Address address = em.find(Address.class, person.getAddress().getId());
         if (address.getPersons().size() <= 1){
             em.remove(address);
@@ -169,7 +169,7 @@ public class Facade {
         return HobbyDTO.getHobbyDTOs(hobbyList);
     }
 
-    public PersonDTO deletePersonByID(long id){
+public PersonDTO deletePersonByID(long id){
         EntityManager em = getEntityManager();
         Person person = em.find(Person.class, id);
         try

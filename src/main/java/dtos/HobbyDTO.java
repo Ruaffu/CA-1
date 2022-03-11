@@ -1,14 +1,11 @@
 package dtos;
 
 import entities.Hobby;
-import entities.Person;
 
-import javax.persistence.ManyToMany;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-//todo: make persons into string...
 public class HobbyDTO {
     private Long id;
     private String name;

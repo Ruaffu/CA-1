@@ -1,13 +1,10 @@
 package dtos;
 
-import entities.Person;
 import entities.Phone;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-// todo: make person field into a String
 public class PhoneDTO {
     private Long id;
     private String number;
