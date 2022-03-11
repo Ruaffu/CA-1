@@ -21,14 +21,14 @@ public class Person implements Serializable {
     private String email;
 
     @OneToMany(mappedBy = "person", cascade = CascadeType.PERSIST)
-    private Set<Phone> phones;
+    private Set<Phone> phones = new HashSet<>();
 
     @ManyToOne (cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(name = "ADDRESS_ID")
     private Address address;
 
     @ManyToMany(mappedBy = "persons", cascade = CascadeType.PERSIST)
-    private Set<Hobby> hobbies;
+    private Set<Hobby> hobbies = new HashSet<>();
 
     
     public Person() {

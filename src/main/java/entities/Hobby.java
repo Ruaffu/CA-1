@@ -1,6 +1,8 @@
 package entities;
 
 import javax.persistence.*;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -13,7 +15,7 @@ public class Hobby {
     private String description;
 
     @ManyToMany (cascade = CascadeType.PERSIST)
-    private Set<Person> persons;
+    private Set<Person> persons = new HashSet<>();
 
     public Hobby() {
     }
