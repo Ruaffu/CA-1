@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+//todo: make persons into string...
 public class HobbyDTO {
     private Long id;
     private String name;

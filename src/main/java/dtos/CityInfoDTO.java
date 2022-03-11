@@ -8,7 +8,7 @@ import javax.persistence.OneToMany;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
+// todo: make addresses into string...
 public class CityInfoDTO {
     private Long id;
     private String zipcode;

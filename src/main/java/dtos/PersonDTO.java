@@ -21,6 +21,8 @@ import java.util.List;
  *
  * @author tha
  */
+
+// todo: phones, address, hobbies into Strings....
 public class PersonDTO {
     private long id;
     private String firstname;

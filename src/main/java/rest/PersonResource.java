@@ -51,6 +51,7 @@ public class PersonResource {
                 .build();
     }
 
+    // todo: check if works
     @GET
     @Path("/hobby/{hobby}")
     @Produces({MediaType.APPLICATION_JSON})
@@ -61,6 +62,7 @@ public class PersonResource {
                 .build();
     }
 
+    // todo: check if works
     @GET
     @Path("/zipcode/{zipcode}")
     @Produces({MediaType.APPLICATION_JSON})
@@ -71,6 +73,7 @@ public class PersonResource {
                 .build();
     }
 
+    // todo: check if works
     @GET
     @Path("/phone/{phone}")
     @Produces({MediaType.APPLICATION_JSON})
@@ -81,6 +84,8 @@ public class PersonResource {
                 .build();
     }
 
+
+    // todo: check delete method
     @DELETE
     @Path("delete/{id}")
     @Produces({MediaType.APPLICATION_JSON})

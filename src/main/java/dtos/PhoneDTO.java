@@ -3,6 +3,7 @@ package dtos;
 import entities.Person;
 import entities.Phone;
 
+// todo: make person field into a String
 public class PhoneDTO {
     private Long id;
     private String number;
