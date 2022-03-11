@@ -163,4 +163,15 @@ public class FacadeTest {
         String actual = facade.getPersonByPhoneNumber("12345678").getFirstname();
         assertEquals(expected, actual);
     }
+
+//    @Test
+//    void testDeletePersonById(){
+//        System.out.println("Testing deletePersonById()");
+//        int expected = 1;
+//        PersonDTO deletedPerson = facade.deletePersonByID(p1.getId());
+//        int actual = facade.getAll().size();
+//        System.out.println(deletedPerson.getFirstname());
+//        assertEquals(expected, actual);
+//
+//    }
 }

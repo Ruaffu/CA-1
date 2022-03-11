@@ -144,6 +144,21 @@ public class Facade {
         return personDTO;
     }
 
+//    public PersonDTO deletePersonByID(long id){
+//        EntityManager em = getEntityManager();
+//        Person person = em.find(Person.class, id);
+//        try
+//        {
+//            em.getTransaction().begin();
+//            em.remove(person);
+//            em.getTransaction().commit();
+//        }finally
+//        {
+//            em.close();
+//        }
+//        return new PersonDTO(person);
+//    }
+
 //    public AddressDTO deleteAddress(Long id){
 //        EntityManager em = emf.createEntityManager();
 //
