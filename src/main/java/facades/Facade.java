@@ -144,29 +144,29 @@ public class Facade {
         return personDTO;
     }
 
-    public AddressDTO deleteAddress(Long id){
-        EntityManager em = emf.createEntityManager();
-
-//        address.getPersons().forEach( (person -> {
-//            person.setAddress(new Address("123", ""));
-//            em.merge(person);
-//        }));
+//    public AddressDTO deleteAddress(Long id){
+//        EntityManager em = emf.createEntityManager();
 //
-//        address.setPersons(null);
-
-
-        Address address = null;
-        try {
-            System.out.println(id);
-            em.getTransaction().begin();
-            address = em.find(Address.class, id);
-            em.remove(address);
-            em.clear();
-            em.getTransaction().commit();
-        } finally {
-            em.close();
-        }
-
-        return new AddressDTO(address);
-    }
+////        address.getPersons().forEach( (person -> {
+////            person.setAddress(new Address("123", ""));
+////            em.merge(person);
+////        }));
+////
+////        address.setPersons(null);
+//
+//
+//        Address address = null;
+//        try {
+//            System.out.println(id);
+//            em.getTransaction().begin();
+//            address = em.find(Address.class, id);
+//            em.remove(address);
+////            em.clear();
+//            em.getTransaction().commit();
+//        } finally {
+//            em.close();
+//        }
+//
+//        return new AddressDTO(address);
+//    }
 }
