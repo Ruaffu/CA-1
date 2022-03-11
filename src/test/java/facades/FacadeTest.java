@@ -121,7 +121,7 @@ public class FacadeTest {
     @Test
     void testGetAllCityInfos() {
         System.out.println("Testing getAllCityInfos()");
-        int expected = 1;
+        int expected = 2;
         int actual = facade.getAllCityInfos().size();
         assertEquals(expected, actual);
     }
@@ -132,6 +132,9 @@ public class FacadeTest {
 
         String expected = "bob";
         p1.setFirstname("bob");
+        p1.setAddress(new Address("Danmarks gade 2","", new CityInfo("7430", "Ikast")));
+        p1.getHobbies().remove(p1.getHobbies().iterator().next());
+        System.out.println(p1.getHobbies().size());
         String actual = facade.editPerson(new PersonDTO(p1)).getFirstname();
         assertEquals(expected, actual);
     }

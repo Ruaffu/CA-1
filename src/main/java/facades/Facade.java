@@ -111,12 +111,22 @@ public class Facade {
         EntityManager em = emf.createEntityManager();
 
         Person person = em.find(Person.class, personDTO.getId());
-        person.setFirstname(personDTO.getFirstname());
-        person.setLastname(personDTO.getLastname());
+
+        Address address = em.find(Address.class, person.getAddress().getId());
+        if (address.getPersons().size() <= 1){
+            em.remove(address);
+        }
         person.setAddress(personDTO.getAddress());
-        person.setEmail(personDTO.getEmail());
+
+        // todo: make sure that hobbies and phones that are no longer in use is remove from DB
         person.setHobbies(personDTO.getHobbies());
         person.setPhones(personDTO.getPhones());
+
+
+        person.setFirstname(personDTO.getFirstname());
+        person.setLastname(personDTO.getLastname());
+        person.setEmail(personDTO.getEmail());
+
         try {
             em.getTransaction().begin();
             em.merge(person);
