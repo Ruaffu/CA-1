@@ -5,14 +5,8 @@
  */
 package dtos;
 
-import entities.Address;
-import entities.Hobby;
 import entities.Person;
-import entities.Phone;
 
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.List;
@@ -28,25 +22,9 @@ public class PersonDTO {
     private String firstname;
     private String lastname;
     private String email;
-    private Set<Phone> phones;
-    private Address address;
-    private Set<Hobby> hobbies;
-
-    //TODO: MAYBE DELETE LATER?
-    public PersonDTO(String firstname, String lastname, String email) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.email = email;
-    }
-
-    public PersonDTO(String firstname, String lastname, String email, Set<Phone> phones, Address address, Set<Hobby> hobbies) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.email = email;
-        this.phones = phones;
-        this.address = address;
-        this.hobbies = hobbies;
-    }
+    private Set<PhoneDTO> phones;
+    private AddressDTO address;
+    private Set<HobbyDTO> hobbies;
 
     public PersonDTO(Person person) {
         if(person.getId() != null)
@@ -54,9 +32,9 @@ public class PersonDTO {
         this.firstname = person.getFirstname();
         this.lastname = person.getLastname();
         this.email = person.getEmail();
-        this.phones = person.getPhones();
-        this.address = person.getAddress();
-        this.hobbies = person.getHobbies();
+        this.phones = PhoneDTO.getPhoneDTOs(person.getPhones());
+        this.address = new AddressDTO(person.getAddress());
+        this.hobbies = HobbyDTO.getHobbyDTOs(person.getHobbies());
     }
 
     public static Set<PersonDTO> getPersonDTOs(List<Person> person){
@@ -103,27 +81,27 @@ public class PersonDTO {
         this.email = email;
     }
 
-    public Set<Phone> getPhones() {
+    public Set<PhoneDTO> getPhones() {
         return phones;
     }
 
-    public void setPhones(Set<Phone> phones) {
+    public void setPhones(Set<PhoneDTO> phones) {
         this.phones = phones;
     }
 
-    public Address getAddress() {
+    public AddressDTO getAddress() {
         return address;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(AddressDTO address) {
         this.address = address;
     }
 
-    public Set<Hobby> getHobbies() {
+    public Set<HobbyDTO> getHobbies() {
         return hobbies;
     }
 
-    public void setHobbies(Set<Hobby> hobbies) {
+    public void setHobbies(Set<HobbyDTO> hobbies) {
         this.hobbies = hobbies;
     }
 

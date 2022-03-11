@@ -53,16 +53,19 @@ public class Facade {
 
 
     public PersonDTO create(PersonDTO personDTO) {
-        Person person = new Person(personDTO.getFirstname(), personDTO.getLastname(), personDTO.getEmail(), personDTO.getPhones(), personDTO.getAddress(), personDTO.getHobbies());
+        Person person = new Person(personDTO.getFirstname(), personDTO.getLastname(), personDTO.getEmail());
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
+            Address address = new Address(personDTO.getAddress().getStreet(),personDTO.getAddress().getAdditionalInfo(),
+                    new CityInfo(personDTO.getAddress().getZipcode(),personDTO.getAddress().getCity()));
+            person.setAddress(address);
             em.persist(person);
             em.getTransaction().commit();
         } finally {
             em.close();
         }
-        return new PersonDTO(person);
+        return personDTO;
     }
 
     // todo: create custom exception
@@ -116,11 +119,11 @@ public class Facade {
         if (address.getPersons().size() <= 1){
             em.remove(address);
         }
-        person.setAddress(personDTO.getAddress());
-
-        // todo: make sure that hobbies and phones that are no longer in use is remove from DB
-        person.setHobbies(personDTO.getHobbies());
-        person.setPhones(personDTO.getPhones());
+//        person.setAddress(personDTO.getAddress());
+//
+//        // todo: make sure that hobbies and phones that are no longer in use is remove from DB
+//        person.setHobbies(personDTO.getHobbies());
+//        person.setPhones(personDTO.getPhones());
 
 
         person.setFirstname(personDTO.getFirstname());

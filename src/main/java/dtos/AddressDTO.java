@@ -9,27 +9,18 @@ import java.util.Set;
 public class AddressDTO {
     private Long id;
     private String street;
-    private String additionalinfo;
-    private Set<Person> persons;
-    private CityInfo cityInfo;
-
-
-    public AddressDTO(String street, String additionalinfo, Set<Person> persons, CityInfo cityInfo) {
-        this.street = street;
-        this.additionalinfo = additionalinfo;
-        this.persons = persons;
-        this.cityInfo = cityInfo;
-    }
+    private String additionalInfo;
+    private String city;
+    private String zipcode;
 
     public AddressDTO(Address address) {
-        if(address.getId() != null)
+        if(address.getId() != null) {
             this.id = address.getId();
-
+        }
         this.street = address.getStreet();
-        this.additionalinfo = address.getAdditionalInfo();
-        this.persons = address.getPersons();
-        this.cityInfo = address.getCityInfo();
-
+        this.additionalInfo = address.getAdditionalInfo();
+        this.city = address.getCityInfo().getCity();
+        this.zipcode = address.getCityInfo().getZipcode();
     }
 
     public Long getId() {
@@ -48,28 +39,28 @@ public class AddressDTO {
         this.street = street;
     }
 
-    public String getAdditionalinfo() {
-        return additionalinfo;
+    public String getAdditionalInfo() {
+        return additionalInfo;
     }
 
-    public void setAdditionalinfo(String additionalinfo) {
-        this.additionalinfo = additionalinfo;
+    public void setAdditionalInfo(String additionalInfo) {
+        this.additionalInfo = additionalInfo;
     }
 
-    public Set<Person> getPersons() {
-        return persons;
+    public String getCity() {
+        return city;
     }
 
-    public void setPersons(Set<Person> persons) {
-        this.persons = persons;
+    public void setCity(String city) {
+        this.city = city;
     }
 
-    public CityInfo getCityInfo() {
-        return cityInfo;
+    public String getZipcode() {
+        return zipcode;
     }
 
-    public void setCityInfo(CityInfo cityInfo) {
-        this.cityInfo = cityInfo;
+    public void setZipcode(String zipcode) {
+        this.zipcode = zipcode;
     }
 
     @Override
@@ -77,9 +68,9 @@ public class AddressDTO {
         return "AddressDTO{" +
                 "id=" + id +
                 ", street='" + street + '\'' +
-                ", additionalinfo='" + additionalinfo + '\'' +
-                ", persons=" + persons +
-                ", cityInfo=" + cityInfo +
+                ", additionalInfo='" + additionalInfo + '\'' +
+                ", city='" + city + '\'' +
+                ", zipcode='" + zipcode + '\'' +
                 '}';
     }
 }

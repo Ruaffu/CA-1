@@ -3,25 +3,27 @@ package dtos;
 import entities.Person;
 import entities.Phone;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 // todo: make person field into a String
 public class PhoneDTO {
     private Long id;
     private String number;
     private String description;
-    private Person person;
-
-    public PhoneDTO(String number, String description, Person person) {
-        this.number = number;
-        this.description = description;
-        this.person = person;
-    }
 
     public PhoneDTO(Phone phone) {
         if(phone.getId() != null)
             this.id = phone.getId();
         this.number = phone.getNumber();
         this.description = phone.getDescription();
-        this.person = phone.getPerson();
+    }
+
+    public static Set<PhoneDTO> getPhoneDTOs(Set<Phone> phone){
+        Set<PhoneDTO> phoneDTOS = new HashSet<>();
+        phone.forEach(p->phoneDTOS.add(new PhoneDTO(p)));
+        return phoneDTOS;
     }
 
     public Long getId() {
@@ -48,21 +50,12 @@ public class PhoneDTO {
         this.description = description;
     }
 
-    public Person getPerson() {
-        return person;
-    }
-
-    public void setPerson(Person person) {
-        this.person = person;
-    }
-
     @Override
     public String toString() {
         return "PhoneDTO{" +
                 "id=" + id +
                 ", number='" + number + '\'' +
                 ", description='" + description + '\'' +
-                ", person=" + person +
                 '}';
     }
 }

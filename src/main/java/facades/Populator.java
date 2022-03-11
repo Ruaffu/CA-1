@@ -21,9 +21,24 @@ public class Populator {
     public static void populate(){
         EntityManagerFactory emf = EMF_Creator.createEntityManagerFactory();
         Facade fe = Facade.getFacade(emf);
-        fe.create(new PersonDTO(new Person("First 1", "Last 1", "Email 1")));
-        fe.create(new PersonDTO(new Person("First 2", "Last 2", "Email 2")));
-        fe.create(new PersonDTO(new Person("First 3", "Last 3", "Email 3")));
+
+        Person person1 = new Person("First 1", "Last 1", "Email 1");
+        Person person2 = new Person("First 2", "Last 2", "Email 2");
+        Person person3 = new Person("First 3", "Last 3", "Email 3");
+
+        Address address = new Address("street 1",  "", new CityInfo("8600", "silkeborg"));
+
+        person1.setAddress(address);
+        person2.setAddress(address);
+        person3.setAddress(address);
+
+        PersonDTO p1 = new PersonDTO(person1);
+        PersonDTO p2 = new PersonDTO(person2);
+        PersonDTO p3 = new PersonDTO(person3);
+
+        fe.create(p1);
+        fe.create(p2);
+        fe.create(p3);
     }
     
     public static void main(String[] args) {

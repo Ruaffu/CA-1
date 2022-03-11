@@ -92,7 +92,9 @@ public class FacadeTest {
     @Test
     void testCreatePerson() {
         System.out.println("Testing create()");
-        PersonDTO pd1 = new PersonDTO("test", "testy", "12345");
+        Person p = new Person("test", "testy", "12345");
+        p.setAddress(new Address("", "", new CityInfo("8600", "silkeborg")));
+        PersonDTO pd1 = new PersonDTO(p);
         facade.create(pd1);
         int expected = 3;
         int actual = facade.getAll().size();
@@ -102,8 +104,6 @@ public class FacadeTest {
     @Test
     void testGetPersonsByHobby() {
         System.out.println("Testing PersonsByHobby()");
-        HobbyDTO hobbyDTO = new HobbyDTO("fodbold", "spark", new HashSet<>());
-        hobbyDTO.getPersons().add(p1);
         int expected = 2;
         int actual = facade.getPersonsByHobby("fodbold").size();
         assertEquals(expected, actual);
