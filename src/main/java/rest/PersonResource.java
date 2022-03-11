@@ -65,5 +65,15 @@ public class PersonResource {
                 .build();
     }
 
+    @GET
+    @Path("zipcode/{zipcode}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getPersonsByZipcode(@PathParam("zipcode") String zipcode) {
+        return Response
+                .ok()
+                .entity(GSON.toJson(FACADE.getAllPersonsByZip(zipcode)))
+                .build();
+    }
+
 
 }
