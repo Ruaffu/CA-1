@@ -32,6 +32,8 @@ public class Populator {
         person2.setAddress(address);
         person3.setAddress(address);
 
+        person1.addHobby(new Hobby("fodbold", "Spark"));
+
         PersonDTO p1 = new PersonDTO(person1);
         PersonDTO p2 = new PersonDTO(person2);
         PersonDTO p3 = new PersonDTO(person3);

@@ -60,6 +60,11 @@ public class Facade {
             Address address = new Address(personDTO.getAddress().getStreet(),personDTO.getAddress().getAdditionalInfo(),
                     new CityInfo(personDTO.getAddress().getZipcode(),personDTO.getAddress().getCity()));
             person.setAddress(address);
+
+            personDTO.getHobbies().forEach(hobbyDTO -> {
+                person.addHobby(new Hobby(hobbyDTO.getName(), hobbyDTO.getDescription()));
+            });
+
             em.persist(person);
             em.getTransaction().commit();
         } finally {
