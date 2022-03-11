@@ -7,11 +7,13 @@ import facades.Facade;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 //Todo Remove or change relevant parts before ACTUAL use
-@Path("xxx")
+@Path("person")
 public class PersonResource {
 
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
@@ -24,4 +26,19 @@ public class PersonResource {
     public String demo() {
         return "{\"msg\":\"Hello World\"}";
     }
+
+
+    //TODO: getPersonByHobby,
+    // getAllpersonbyzipcode,
+    // editperson, createperson,
+    // getpersonbyphonenumber, deletepersonbyid, getbyid
+
+    @GET
+    @Path("/{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getPersonById(@PathParam("id") long id) {
+        return Response.ok().entity(GSON.toJson(FACADE.getById(id))).build();
+    }
+
+
 }
