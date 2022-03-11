@@ -1,13 +1,16 @@
 package rest;
 
-import entities.Person;
+import entities.*;
+import io.restassured.http.ContentType;
 import utils.EMF_Creator;
 import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
 import io.restassured.parsing.Parser;
 import java.net.URI;
+import java.util.HashSet;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.grizzly.http.util.HttpStatus;
@@ -22,11 +25,12 @@ import org.junit.jupiter.api.Test;
 //Uncomment the line below, to temporarily disable this test
 //@Disabled
 
-public class RenameMeResourceTest {
+public class PersonResourceTest
+{
 
     private static final int SERVER_PORT = 7777;
     private static final String SERVER_URL = "http://localhost/api";
-    private static Person r1, r2;
+    private static Person p1, p2;
 
     static final URI BASE_URI = UriBuilder.fromUri(SERVER_URL).port(SERVER_PORT).build();
     private static HttpServer httpServer;
@@ -64,17 +68,40 @@ public class RenameMeResourceTest {
     @BeforeEach
     public void setUp() {
         EntityManager em = emf.createEntityManager();
-        r1 = new Person("Some txt", "More text", "some more text");
-        r2 = new Person("aaa", "bbb", "ccc");
         try {
             em.getTransaction().begin();
             em.createNamedQuery("Person.deleteAllRows").executeUpdate();
-            em.persist(r1);
-            em.persist(r2);
+            p1 = new Person("Some txt", "More text", "some more text", new HashSet<>(),
+                    new Address("Chr. den 8. vej", "",
+                            new CityInfo("8600", "Silkeborg")), new HashSet<>());
+            p1.addPhone(new Phone("12345678", "fastnet"));
+            Hobby h1 = new Hobby("fodbold", "spark", new HashSet<>());
+            p1.addHobby(h1);
+
+            p2 = new Person("aaa", "bbb", "ccc", new HashSet<>(),
+                    new Address("Mobo vej", "",
+                            new CityInfo("4040", "Jyllinge")), new HashSet<>());
+            p2.addPhone(new Phone("87654321", "mobile"));
+            p2.addHobby(h1);
+
+            em.persist(p1);
+            em.persist(p2);
+
             em.getTransaction().commit();
         } finally {
             em.close();
         }
+    }
+
+    @Test
+    void testGetPersonById(){
+        given().contentType(MediaType.APPLICATION_JSON)
+                .get("/person/{id}", p1.getId())
+                .then()
+                .assertThat()
+                .statusCode(200)
+                .body("firstName", equalTo(p1.getFirstname()))
+                .body("lastName", equalTo(p1.getLastname()));
     }
 
 }
