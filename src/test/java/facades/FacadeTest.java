@@ -47,12 +47,14 @@ public class FacadeTest {
             em.createNamedQuery("Person.deleteAllRows").executeUpdate();
             p1 = new Person("Some txt", "More text", "some more text", new HashSet<>(), new Address("Chr. den 8. vej", "", new CityInfo("8600", "Silkeborg")), new HashSet<>());
             p1.addPhone(new Phone("12345678", "fastnet"));
-            Hobby h = new Hobby("fodbold", "spark", new HashSet<>());
-            p1.addHobby(h);
+            Hobby h1 = new Hobby("fodbold", "spark", new HashSet<>());
+            p1.addHobby(h1);
 
-            p2 = new Person("aaa", "bbb", "ccc");
+            p2 = new Person("aaa", "bbb", "ccc", new HashSet<>(), new Address("Mobo vej", "", new CityInfo("4040", "Jyllinge")), new HashSet<>());
+            p2.addPhone(new Phone("87654321", "mobile"));
+            p2.addHobby(h1);
 
-            em.persist(h);
+            em.persist(h1);
 
             em.persist(p1);
             em.persist(p2);
@@ -132,13 +134,29 @@ public class FacadeTest {
         assertEquals(expected, actual);
     }
 
-    //    @Test
-//    void testDeleteAddress() {
-//        System.out.println("Testing deleteAddress()");
-//        int expected = 0;
-//        System.out.println(facade.deleteAddress(1L));
-//
-//        int actual = facade.getAllPersonsByZip("8600").size();
-//        assertEquals(expected, actual);
-//    }
+        @Test
+    void testDeleteAddress() {
+        System.out.println("Testing deleteAddress()");
+        int expected = 0;
+        System.out.println(facade.deleteAddress(p1.getAddress().getId()));
+
+        int actual = facade.getAllPersonsByZip("8600").size();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void testGEtNumberOfPeopleWithGivenHobby(){
+        System.out.println("Testing getNumberOfPeopleWithAHobby()");
+        int expected = 2;
+        int actual = facade.getNumberOfPeopleWithAHobby("fodbold");
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void testGetPersonByPhoneNumber(){
+        System.out.println("Testing getPersonByPhoneNumber()");
+        String expected = "Some txt";
+        String actual = facade.getPersonByPhoneNumber("12345678").getFirstname();
+        assertEquals(expected, actual);
+    }
 }

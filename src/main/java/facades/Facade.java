@@ -128,29 +128,45 @@ public class Facade {
         return new PersonDTO(person);
     }
 
+    public int getNumberOfPeopleWithAHobby(String name){
+        EntityManager em = getEntityManager();
+        TypedQuery<Hobby> query = em.createQuery("SELECT h FROM Hobby h WHERE h.name=:name", Hobby.class);
+        query.setParameter("name", name);
+        Hobby hobby = query.getSingleResult();
+        return hobby.getPersons().size();
+    }
+
+    public PersonDTO getPersonByPhoneNumber(String number){
+        EntityManager em = getEntityManager();
+        TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p JOIN Phone pn WHERE pn.number =:number AND p.id= pn.person.id", Person.class);
+        query.setParameter("number", number);
+        PersonDTO personDTO = new PersonDTO(query.getSingleResult());
+        return personDTO;
+    }
+
+    public AddressDTO deleteAddress(Long id){
+        EntityManager em = emf.createEntityManager();
+
+//        address.getPersons().forEach( (person -> {
+//            person.setAddress(new Address("123", ""));
+//            em.merge(person);
+//        }));
+//
+//        address.setPersons(null);
 
 
-//    public AddressDTO deleteAddress(Long id){
-//        EntityManager em = emf.createEntityManager();
-//
-////        address.getPersons().forEach( (person -> {
-////            person.setAddress(new Address("123", ""));
-////            em.merge(person);
-////        }));
-////
-////        address.setPersons(null);
-//
-//
-//        Address address = null;
-//        try {
-//            em.getTransaction().begin();
-//            address = em.find(Address.class, id);
-//            em.remove(address);
-//            em.getTransaction().commit();
-//        } finally {
-//            em.close();
-//        }
-//
-//        return new AddressDTO(address);
-//    }
+        Address address = null;
+        try {
+            System.out.println(id);
+            em.getTransaction().begin();
+            address = em.find(Address.class, id);
+            em.remove(address);
+            em.clear();
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+
+        return new AddressDTO(address);
+    }
 }

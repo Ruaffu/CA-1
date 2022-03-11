@@ -27,7 +27,7 @@ public class Person implements Serializable {
     @JoinColumn(name = "ADDRESS_ID")
     private Address address;
 
-    @ManyToMany(mappedBy = "persons")
+    @ManyToMany(mappedBy = "persons", cascade = CascadeType.PERSIST)
     private Set<Hobby> hobbies;
 
     

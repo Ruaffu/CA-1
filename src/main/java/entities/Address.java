@@ -1,5 +1,7 @@
 package entities;
 
+import org.eclipse.persistence.annotations.CascadeOnDelete;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -13,7 +15,8 @@ public class Address {
     private String street;
     private String additionalInfo;
 
-    @OneToMany(mappedBy = "address", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "address", fetch = FetchType.LAZY, orphanRemoval = true)
+    @CascadeOnDelete
     private Set<Person> persons = new HashSet<>();
 
     @ManyToOne (cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
