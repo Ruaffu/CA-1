@@ -6,10 +6,7 @@ import dtos.PersonDTO;
 import utils.EMF_Creator;
 import facades.Facade;
 import javax.persistence.EntityManagerFactory;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -32,7 +29,7 @@ public class PersonResource {
 
     //TODO:
     // editperson, createperson,
-    // getpersonbyphonenumber, deletepersonbyid
+    // deletepersonbyid
 
     @GET
     @Path("/{id}")
@@ -75,7 +72,7 @@ public class PersonResource {
     }
 
     @GET
-    @Path("phone/{phone}")
+    @Path("/phone/{phone}")
     @Produces({MediaType.APPLICATION_JSON})
     public Response getPersonsByPhone(@PathParam("phone") String phone) {
         return Response
@@ -84,5 +81,14 @@ public class PersonResource {
                 .build();
     }
 
+    @DELETE
+    @Path("delete/{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response deletePersonById(@PathParam("id") long id) {
+        return Response
+                .ok()
+                .entity(GSON.toJson(FACADE.deletePersonByID(id)))
+                .build();
+    }
 
 }
