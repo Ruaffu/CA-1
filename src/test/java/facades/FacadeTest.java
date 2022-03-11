@@ -104,8 +104,8 @@ public class FacadeTest {
         System.out.println("Testing PersonsByHobby()");
         HobbyDTO hobbyDTO = new HobbyDTO("fodbold", "spark", new HashSet<>());
         hobbyDTO.getPersons().add(p1);
-        int expected = 1;
-        int actual = facade.getPersonsByHobby(hobbyDTO).size();
+        int expected = 2;
+        int actual = facade.getPersonsByHobby("fodbold").size();
         assertEquals(expected, actual);
     }
 

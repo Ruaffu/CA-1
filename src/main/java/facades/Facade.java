@@ -82,10 +82,10 @@ public class Facade {
     }
 
 
-    public Set<PersonDTO> getPersonsByHobby(HobbyDTO hobbyDTO){
+    public Set<PersonDTO> getPersonsByHobby(String hobbyName){
         EntityManager em = emf.createEntityManager();
         TypedQuery<Hobby> query = em.createQuery("SELECT h FROM Hobby h WHERE h.name =:hobby", Hobby.class);
-        query.setParameter("hobby", hobbyDTO.getName());
+        query.setParameter("hobby", hobbyName);
         Hobby hobby = query.getSingleResult();
         return PersonDTO.getPersonDTOs(hobby.getPersons());
     }
