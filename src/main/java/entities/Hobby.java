@@ -14,7 +14,7 @@ public class Hobby {
     private String name;
     private String description;
 
-    @ManyToMany (cascade = CascadeType.PERSIST)
+    @ManyToMany
     private Set<Person> persons = new HashSet<>();
 
     public Hobby() {

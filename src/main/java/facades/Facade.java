@@ -6,6 +6,7 @@ import dtos.HobbyDTO;
 import dtos.PersonDTO;
 import entities.*;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.EntityManager;
@@ -47,7 +48,7 @@ public class Facade {
         return emf.createEntityManager();
     }
 
-    // todo: check if address, phone, hobby already exists
+    // todo: check if phone, hobby already exists
     public PersonDTO create(PersonDTO personDTO) {
         Person person = new Person(personDTO.getFirstname(), personDTO.getLastname(), personDTO.getEmail());
         EntityManager em = getEntityManager();
@@ -66,10 +67,15 @@ public class Facade {
                 person.getAddress().setCityInfo(cityInfo);
             }
 
-
             personDTO.getHobbies().forEach(hobbyDTO -> {
-                person.addHobby(new Hobby(hobbyDTO.getName(), hobbyDTO.getDescription()));
+                person.addHobby(new Hobby(hobbyDTO.getName(),hobbyDTO.getDescription()));
             });
+
+//            Set<Hobby> hobbies = new HashSet<>();
+//            personDTO.getHobbies().forEach(hobbyDTO -> {
+//                hobbies.add(checkHobby(hobbyDTO));
+//            });
+//            person.setHobbies(hobbies);
 
             personDTO.getPhones().forEach(phoneDTO -> {
                 person.addPhone(new Phone(phoneDTO.getNumber(), phoneDTO.getDescription()));
@@ -78,7 +84,7 @@ public class Facade {
             em.getTransaction().begin();
             em.persist(person);
             em.merge(person.getAddress().getCityInfo());
-            if(person.getAddress().getId() == null){
+            if (person.getAddress().getId() == null) {
                 em.persist(person.getAddress());
             } else {
                 em.merge(person.getAddress());
@@ -88,6 +94,19 @@ public class Facade {
             em.close();
         }
         return new PersonDTO(person);
+    }
+
+    private Hobby checkHobby(HobbyDTO hobbyDTO) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Hobby> query = em.createQuery("SELECT h FROM Hobby h WHERE h.name =:name", Hobby.class);
+            query.setParameter("name", hobbyDTO.getName());
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return new Hobby(hobbyDTO.getName(), hobbyDTO.getDescription());
+        } finally {
+            em.close();
+        }
     }
 
     public Address checkAddress(AddressDTO addressDTO) {
