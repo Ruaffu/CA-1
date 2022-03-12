@@ -1,5 +1,6 @@
 package facades;
 
+import dtos.AddressDTO;
 import dtos.CityInfoDTO;
 import dtos.HobbyDTO;
 import dtos.PersonDTO;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 //import errorhandling.RenameMeNotFoundException;
@@ -50,10 +52,20 @@ public class Facade {
         Person person = new Person(personDTO.getFirstname(), personDTO.getLastname(), personDTO.getEmail());
         EntityManager em = getEntityManager();
         try {
-            em.getTransaction().begin();
-            Address address = new Address(personDTO.getAddress().getStreet(),personDTO.getAddress().getAdditionalInfo(),
-                    new CityInfo(personDTO.getAddress().getZipcode(),personDTO.getAddress().getCity()));
+            // checks if address already exists
+            Address address = checkAddress(personDTO.getAddress());
+            if (address == null) {
+                address = new Address(personDTO.getAddress().getStreet(), personDTO.getAddress().getAdditionalInfo(),
+                        new CityInfo(personDTO.getAddress().getZipcode(), personDTO.getAddress().getCity()));
+            }
             person.setAddress(address);
+
+            // checks for address city
+            CityInfo cityInfo = checkCityInfo(address.getCityInfo());
+            if (cityInfo != null) {
+                person.getAddress().setCityInfo(cityInfo);
+            }
+
 
             personDTO.getHobbies().forEach(hobbyDTO -> {
                 person.addHobby(new Hobby(hobbyDTO.getName(), hobbyDTO.getDescription()));
@@ -63,12 +75,51 @@ public class Facade {
                 person.addPhone(new Phone(phoneDTO.getNumber(), phoneDTO.getDescription()));
             });
 
+            em.getTransaction().begin();
             em.persist(person);
+            em.merge(person.getAddress().getCityInfo());
+            if(person.getAddress().getId() == null){
+                em.persist(person.getAddress());
+            } else {
+                em.merge(person.getAddress());
+            }
             em.getTransaction().commit();
         } finally {
             em.close();
         }
-        return personDTO;
+        return new PersonDTO(person);
+    }
+
+    public Address checkAddress(AddressDTO addressDTO) {
+        EntityManager em = emf.createEntityManager();
+        Address address;
+        try {
+            TypedQuery<Address> query = em.createQuery("SELECT a FROM Address a " +
+                    "WHERE a.street = :street AND a.cityInfo.zipcode =:zipcode", Address.class);
+            query.setParameter("street", addressDTO.getStreet());
+            query.setParameter("zipcode", addressDTO.getZipcode());
+            address = query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
+        }
+        return address;
+    }
+
+    public CityInfo checkCityInfo(CityInfo cityInfo) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<CityInfo> query = em.createQuery("SELECT c FROM CityInfo c " +
+                    "WHERE c.zipcode =:zipcode AND c.city =:city", CityInfo.class);
+            query.setParameter("zipcode", cityInfo.getZipcode());
+            query.setParameter("city", cityInfo.getCity());
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
+        }
     }
 
     // todo: create custom exception
@@ -88,7 +139,7 @@ public class Facade {
     }
 
 
-    public Set<PersonDTO> getPersonsByHobby(String hobbyName){
+    public Set<PersonDTO> getPersonsByHobby(String hobbyName) {
         EntityManager em = emf.createEntityManager();
         TypedQuery<Hobby> query = em.createQuery("SELECT h FROM Hobby h WHERE h.name =:hobby", Hobby.class);
         query.setParameter("hobby", hobbyName);
@@ -97,10 +148,10 @@ public class Facade {
     }
 
     //Get all persons living in a given city (i.e. 2800 Lyngby)
-    public Set<PersonDTO> getAllPersonsByZip(String zipcode){
+    public Set<PersonDTO> getAllPersonsByZip(String zipcode) {
         EntityManager em = emf.createEntityManager();
         TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p JOIN Address a ON p.address.id = a.id WHERE a.cityInfo.zipcode =:zipcode", Person.class);
-        query.setParameter("zipcode",zipcode);
+        query.setParameter("zipcode", zipcode);
         List<Person> people = query.getResultList();
         return PersonDTO.getPersonDTOs(people);
     }
@@ -116,12 +167,12 @@ public class Facade {
     //  so that it works with DTO,
     //  checks for already existing data,
     //  and remove not used data from DB
-    public PersonDTO editPerson(PersonDTO personDTO){
+    public PersonDTO editPerson(PersonDTO personDTO) {
         EntityManager em = emf.createEntityManager();
 
         Person person = em.find(Person.class, personDTO.getId());
         Address address = em.find(Address.class, person.getAddress().getId());
-        if (address.getPersons().size() <= 1){
+        if (address.getPersons().size() <= 1) {
             em.remove(address);
         }
 //        person.setAddress(personDTO.getAddress());
@@ -146,7 +197,7 @@ public class Facade {
         return new PersonDTO(person);
     }
 
-    public int getNumberOfPeopleWithAHobby(String name){
+    public int getNumberOfPeopleWithAHobby(String name) {
         EntityManager em = getEntityManager();
         TypedQuery<Hobby> query = em.createQuery("SELECT h FROM Hobby h WHERE h.name=:name", Hobby.class);
         query.setParameter("name", name);
@@ -154,7 +205,7 @@ public class Facade {
         return hobby.getPersons().size();
     }
 
-    public PersonDTO getPersonByPhoneNumber(String number){
+    public PersonDTO getPersonByPhoneNumber(String number) {
         EntityManager em = getEntityManager();
         TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p JOIN Phone pn WHERE pn.number =:number AND p.id= pn.person.id", Person.class);
         query.setParameter("number", number);
@@ -162,18 +213,17 @@ public class Facade {
         return personDTO;
     }
 
-    public Set<HobbyDTO> getAllHobbies(){
+    public Set<HobbyDTO> getAllHobbies() {
         EntityManager em = emf.createEntityManager();
         TypedQuery<Hobby> query = em.createQuery("SELECT h FROM Hobby h", Hobby.class);
         List<Hobby> hobbyList = query.getResultList();
         return HobbyDTO.getHobbyDTOs(hobbyList);
     }
 
-public PersonDTO deletePersonByID(long id){
+    public PersonDTO deletePersonByID(long id) {
         EntityManager em = getEntityManager();
         Person person = em.find(Person.class, id);
-        try
-        {
+        try {
             em.getTransaction().begin();
 
             // removes phone numbers
@@ -183,14 +233,13 @@ public PersonDTO deletePersonByID(long id){
 
             // removes address, if it's the only one living there.
             Address addressToRemove = em.find(Address.class, person.getAddress().getId());
-            if (addressToRemove.getPersons().size() <= 1){
+            if (addressToRemove.getPersons().size() <= 1) {
                 em.remove(addressToRemove);
             }
 
             em.remove(person);
             em.getTransaction().commit();
-        }finally
-        {
+        } finally {
             em.close();
         }
         return new PersonDTO(person);

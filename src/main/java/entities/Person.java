@@ -1,5 +1,7 @@
 package entities;
 
+import dtos.PersonDTO;
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -23,14 +25,14 @@ public class Person implements Serializable {
     @OneToMany(mappedBy = "person", cascade = CascadeType.PERSIST)
     private Set<Phone> phones = new HashSet<>();
 
-    @ManyToOne (cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ADDRESS_ID")
     private Address address;
 
     @ManyToMany(mappedBy = "persons", cascade = CascadeType.PERSIST)
     private Set<Hobby> hobbies = new HashSet<>();
 
-    
+
     public Person() {
     }
 
