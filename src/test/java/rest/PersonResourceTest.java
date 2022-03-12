@@ -100,8 +100,8 @@ public class PersonResourceTest
                 .then()
                 .assertThat()
                 .statusCode(200)
-                .body("firstName", equalTo(p1.getFirstname()))
-                .body("lastName", equalTo(p1.getLastname()));
+                .body("firstname", equalTo(p1.getFirstname()))
+                .body("lastname", equalTo(p1.getLastname()));
     }
 
 }

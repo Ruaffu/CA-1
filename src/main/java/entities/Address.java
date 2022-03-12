@@ -19,7 +19,7 @@ public class Address {
     @CascadeOnDelete
     private Set<Person> persons = new HashSet<>();
 
-    @ManyToOne (fetch = FetchType.LAZY)
+    @ManyToOne (fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private CityInfo cityInfo;
 
     public Address() {

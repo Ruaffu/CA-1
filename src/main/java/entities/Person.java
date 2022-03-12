@@ -25,7 +25,7 @@ public class Person implements Serializable {
     @OneToMany(mappedBy = "person", cascade = CascadeType.PERSIST)
     private Set<Phone> phones = new HashSet<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "ADDRESS_ID")
     private Address address;
 
