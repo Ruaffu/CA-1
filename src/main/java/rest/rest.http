@@ -1,0 +1,77 @@
+//get all persons
+GET http://localhost:8080/CA1_war_exploded/api/person/all
+
+###
+//get person by id
+GET http://localhost:8080/CA1_war_exploded/api/person/1
+
+###
+//get persons by hobby
+GET http://localhost:8080/CA1_war_exploded/api/person/hobby/Fodbold
+
+###
+//get persons by phone number
+GET http://localhost:8080/CA1_war_exploded/api/person/phone/11111111
+
+###
+//delete person by id and get the deleted person
+DELETE http://localhost:8080/CA1_war_exploded/api/person/delete/3
+
+###
+//edit person by id and get the edited person
+PUT http://localhost:8080/CA1_war_exploded/api/person/edit/5
+Content-Type: application/json
+
+{
+  "id": 5,
+  "firstname": "Eva",
+  "lastname": "F.",
+  "email": "eva@expert.com",
+  "phones": [],
+  "address": {
+    "id": 1,
+    "street": "Hvidovrevej",
+    "additionalInfo": "3",
+    "city": "Hvidovre",
+    "zipcode": "2650"
+  },
+  "hobbies": []
+}
+
+###
+//create person by id and get the created person
+POST http://localhost:8080/CA1_war_exploded/api/person/create
+Content-Type: application/json
+
+{
+  "id": 6,
+  "firstname": "Frank",
+  "lastname": "F.",
+  "email": "frank@freeky.com",
+  "phones": [
+    {
+      "id": 5,
+      "number": "55555555",
+      "description": "Mobil"
+    }
+  ],
+  "address": {
+    "id": 5,
+    "street": "Herlevvej",
+    "additionalInfo": "5",
+    "city": "Herlev",
+    "zipcode": "2730"
+  },
+  "hobbies": [
+    {
+      "id": 1,
+      "description": "https://en.wikipedia.org/wiki/Table_football",
+      "name": "Bordfodbold"
+    },
+    {
+      "id": 2,
+      "description": "https://en.wikipedia.org/wiki/Soccer",
+      "name": "Fodbold"
+    }
+  ]
+}
