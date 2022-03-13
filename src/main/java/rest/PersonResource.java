@@ -3,6 +3,7 @@ package rest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dtos.PersonDTO;
+import entities.Person;
 import utils.EMF_Creator;
 import facades.Facade;
 import javax.persistence.EntityManagerFactory;
@@ -74,22 +75,49 @@ public class PersonResource {
     @GET
     @Path("/phone/{phone}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response getPersonsByPhone(@PathParam("phone") String phone) {
+    public Response getPersonByPhone(@PathParam("phone") String phone) {
         return Response
                 .ok()
                 .entity(GSON.toJson(FACADE.getPersonByPhoneNumber(phone)))
                 .build();
     }
 
-
-    // todo: check delete method
     @DELETE
-    @Path("delete/{id}")
+    @Path("/delete/{id}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response deletePersonById(@PathParam("id") long id) {
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response deletePersonById(@PathParam("id") Long id) {
+        PersonDTO personDTO = FACADE.deletePersonByID(id);
         return Response
                 .ok()
-                .entity(GSON.toJson(FACADE.deletePersonByID(id)))
+                .entity(GSON.toJson(personDTO))
+                .build();
+    }
+
+    //TODO:check create method
+    @POST
+    @Path("/create")
+    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response createPerson(String content) {
+        PersonDTO personDTO = GSON.fromJson(content, PersonDTO.class);
+        return Response
+                .ok()
+                .entity(GSON.toJson(FACADE.create(personDTO)))
+                .build();
+    }
+
+    //TODO: check edit method
+    @PUT
+    @Path("/edit/{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response editPersonById(@PathParam("id") long id, String content) {
+        PersonDTO personDTO = GSON.fromJson(content, PersonDTO.class);
+        PersonDTO editedPerson = FACADE.editPerson(personDTO);
+        return Response
+                .ok()
+                .entity(GSON.toJson(editedPerson))
                 .build();
     }
 

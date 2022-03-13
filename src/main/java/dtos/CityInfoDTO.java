@@ -4,6 +4,7 @@ import entities.CityInfo;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 public class CityInfoDTO {
     private Long id;
@@ -54,5 +55,18 @@ public class CityInfoDTO {
                 ", zipcode='" + zipcode + '\'' +
                 ", city='" + city + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CityInfoDTO that = (CityInfoDTO) o;
+        return Objects.equals(id, that.id) && Objects.equals(zipcode, that.zipcode) && Objects.equals(city, that.city);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, zipcode, city);
     }
 }
