@@ -2,6 +2,7 @@ package rest;
 
 import dtos.PersonDTO;
 import entities.*;
+import facades.Facade;
 import io.restassured.path.json.JsonPath;
 import utils.EMF_Creator;
 import io.restassured.RestAssured;
@@ -274,26 +275,41 @@ public class PersonResourceTest {
         assertThat(actualPersonDTO, equalTo(p1DTO));
     }
 
-    //TODO:make test work
     @Test
     void deletePersonById() {
         System.out.println("Testing to delete and get person by id");
-        PersonDTO actualPersonDTO = given()
+        Facade facade = Facade.getFacade(emf);
+        PersonDTO personDTO = facade.deletePersonByID(3);
+
+        List<PersonDTO> personDTOS = given()
                 .contentType("application/json")
                 .when()
-                .get("/person/delete/")
+                .get("/person/all")
                 .then()
-                .extract().body().jsonPath().getObject("", PersonDTO.class);
-        assertThat(actualPersonDTO, equalTo(p1DTO));
+                .extract().body().jsonPath().getList("", PersonDTO.class);
+
+        assertThat(personDTOS.size(), equalTo(4));
     }
 
-
-    //TODO: make test
     @Test
     void createPerson() {
         System.out.println("Testing to create a person");
 
+        Facade facade = Facade.getFacade(emf);
+        Person person = new Person("Frank", "F.", "frank@freeky.com");
+        person.setAddress(new Address("Herlevvej", "5", new CityInfo("2730", "Herlev")));
+        person.addPhone(new Phone("55555555", "Mobil"));
+        person.addHobby(h1);
+        facade.create(new PersonDTO(person));
 
+        List<PersonDTO> personDTOS = given()
+                .contentType("application/json")
+                .when()
+                .get("/person/all")
+                .then()
+                .extract().body().jsonPath().getList("", PersonDTO.class);
+
+        assertThat(personDTOS.size(), equalTo(6));
     }
 
     //TODO: make test work
@@ -303,7 +319,7 @@ public class PersonResourceTest {
         PersonDTO actualPersonDTO = given()
                 .contentType("application/json")
                 .when()
-                .get("/edit/" + p1.getId())
+                .get("/person/edit/" + p1DTO.getId())
                 .then()
                 .extract().body().jsonPath().getObject("", PersonDTO.class);
         assertThat(actualPersonDTO, equalTo(p1DTO));
