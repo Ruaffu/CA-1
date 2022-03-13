@@ -29,7 +29,7 @@ public class Person implements Serializable {
     @JoinColumn(name = "ADDRESS_ID")
     private Address address;
 
-    @ManyToMany(mappedBy = "persons", cascade = CascadeType.PERSIST)
+    @ManyToMany(mappedBy = "persons")
     private Set<Hobby> hobbies = new HashSet<>();
 
 

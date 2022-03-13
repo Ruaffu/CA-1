@@ -67,15 +67,11 @@ public class Facade {
                 person.getAddress().setCityInfo(cityInfo);
             }
 
+            // check if hobby exists and adds person to it
             personDTO.getHobbies().forEach(hobbyDTO -> {
-                person.addHobby(new Hobby(hobbyDTO.getName(),hobbyDTO.getDescription()));
+                person.addHobby(checkHobby(hobbyDTO));
             });
 
-//            Set<Hobby> hobbies = new HashSet<>();
-//            personDTO.getHobbies().forEach(hobbyDTO -> {
-//                hobbies.add(checkHobby(hobbyDTO));
-//            });
-//            person.setHobbies(hobbies);
 
             personDTO.getPhones().forEach(phoneDTO -> {
                 person.addPhone(new Phone(phoneDTO.getNumber(), phoneDTO.getDescription()));
@@ -83,7 +79,17 @@ public class Facade {
 
             em.getTransaction().begin();
             em.persist(person);
+
             em.merge(person.getAddress().getCityInfo());
+
+            person.getHobbies().forEach(hobby -> {
+                if (hobby.getId() != null){
+                    em.merge(hobby);
+                } else {
+                    em.persist(hobby);
+                }
+            });
+
             if (person.getAddress().getId() == null) {
                 em.persist(person.getAddress());
             } else {
@@ -101,7 +107,10 @@ public class Facade {
         try {
             TypedQuery<Hobby> query = em.createQuery("SELECT h FROM Hobby h WHERE h.name =:name", Hobby.class);
             query.setParameter("name", hobbyDTO.getName());
-            return query.getSingleResult();
+
+            Hobby hobby = query.getSingleResult();
+            return hobby;
+
         } catch (NoResultException e) {
             return new Hobby(hobbyDTO.getName(), hobbyDTO.getDescription());
         } finally {
