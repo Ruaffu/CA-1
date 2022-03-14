@@ -1,9 +1,6 @@
 package facades;
 
-import dtos.AddressDTO;
-import dtos.CityInfoDTO;
-import dtos.HobbyDTO;
-import dtos.PersonDTO;
+import dtos.*;
 import entities.*;
 
 import java.util.HashSet;
@@ -102,7 +99,20 @@ public class Facade {
         return new PersonDTO(person);
     }
 
-    private Hobby checkHobby(HobbyDTO hobbyDTO) {
+//    public Phone checkPhone(PhoneDTO phoneDTO){
+//        EntityManager em = emf.createEntityManager();
+//        try {
+//         TypedQuery<Phone> query = em.createQuery("SELECT p FROM Phone p WHERE p.number =:number", Phone.class);
+//         query.setParameter("number", phoneDTO.getNumber());
+//
+//        } catch (NoResultException e) {
+//
+//        } finally {
+//
+//        }
+//    }
+
+    public Hobby checkHobby(HobbyDTO hobbyDTO) {
         EntityManager em = emf.createEntityManager();
         try {
             TypedQuery<Hobby> query = em.createQuery("SELECT h FROM Hobby h WHERE h.name =:name", Hobby.class);
