@@ -17,9 +17,9 @@ public class PhoneExistsExceptionMapper implements ExceptionMapper<PhoneExistsEx
     {
         Logger.getLogger(PhoneExistsExceptionMapper.class.getName())
                 .log(Level.SEVERE, null, ex);
-        ExceptionDTO err = new ExceptionDTO(404,ex.getMessage());
+        ExceptionDTO err = new ExceptionDTO(400,ex.getMessage());
         return Response
-                .status(404)
+                .status(400)
                 .entity(gson.toJson(err))
                 .type(MediaType.APPLICATION_JSON)
                 .build();
