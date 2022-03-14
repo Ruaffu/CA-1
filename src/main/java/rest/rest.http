@@ -3,7 +3,7 @@ GET http://localhost:8080/CA1_war_exploded/api/person/all
 
 ###
 //get person by id
-GET http://localhost:8080/CA1_war_exploded/api/person/1
+GET http://localhost:8080/CA1_war_exploded/api/person/2
 
 ###
 //get persons by hobby

@@ -25,6 +25,7 @@ public class ApplicationConfig extends Application {
         resources.add(rest.PersonResource.class);
         resources.add(rest.HobbyResource.class);
         resources.add(rest.CityInfoResource.class);
+        resources.add(errorhandling.PersonNotFoundExceptionMapper.class);
     }
     
 }
