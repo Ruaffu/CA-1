@@ -83,7 +83,7 @@ public class Facade {
             em.merge(person.getAddress().getCityInfo());
 
             person.getHobbies().forEach(hobby -> {
-                if (hobby.getId() != null){
+                if (hobby.getId() != null) {
                     em.merge(hobby);
                 } else {
                     em.persist(hobby);
@@ -124,7 +124,7 @@ public class Facade {
             TypedQuery<Hobby> query = em.createQuery("SELECT h FROM Hobby h WHERE h.name =:hobby", Hobby.class);
             query.setParameter("hobby", hobbyname);
             Hobby hobby = query.getSingleResult();
-            if(hobby.getPersons().contains(person)) {
+            if (hobby.getPersons().contains(person)) {
                 return true;
             }
         } finally {
@@ -135,7 +135,7 @@ public class Facade {
 
     public void compareHobbies(PersonDTO pDTO, Person p) {
         for (Hobby h : p.getHobbies()) {
-            if(pDTO.getHobbies().contains(h)) {
+            if (pDTO.getHobbies().contains(h)) {
 
             } else {
 
@@ -226,7 +226,7 @@ public class Facade {
         Person person = em.find(Person.class, personDTO.getId());
         Address address = em.find(Address.class, person.getAddress().getId());
 
-        if(!(personDTO.getAddress().equals(address))) {
+        if (!(personDTO.getAddress().equals(address))) {
             person.setAddress(new Address(personDTO.getAddress()));
             if (address.getPersons().size() <= 1) {
                 em.remove(address);
@@ -238,9 +238,23 @@ public class Facade {
             person.getAddress().setCityInfo(cityInfo);
         }
 
+        // adds person to hobbies
         personDTO.getHobbies().forEach(hobbyDTO -> {
             person.addHobby(checkHobby(hobbyDTO));
         });
+
+        // makes a set of hobbies to remove
+        Set<Hobby> hobbiesToRemove = new HashSet<>();
+        for (Hobby h : person.getHobbies()) {
+            if (!(personDTO.getHobbies().contains(new HobbyDTO(h)))) {
+                hobbiesToRemove.add(h);
+            }
+        }
+        // removes person from no longer active hobbies
+         hobbiesToRemove.forEach(hobby -> {
+             hobby.getPersons().remove(person);
+         });
+
 
 
 //        // todo: make sure that hobbies and phones that are no longer in use is remove from DB
@@ -255,14 +269,14 @@ public class Facade {
         try {
             em.getTransaction().begin();
             person.getHobbies().forEach(hobby -> {
-                if (hobby.getId() != null){
+                if (hobby.getId() != null) {
                     em.merge(hobby);
                 } else {
-                    if(!hasHobby(hobby.getName(), person)) {
-                        em.persist(hobby);
-                    }
+                    em.persist(hobby);
                 }
             });
+            hobbiesToRemove.forEach(em::merge);
+
             em.merge(person);
             em.getTransaction().commit();
         } finally {
