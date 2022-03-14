@@ -45,18 +45,28 @@ public class FacadeTest {
         try {
             em.getTransaction().begin();
             em.createNamedQuery("Person.deleteAllRows").executeUpdate();
-            p1 = new Person("Some txt", "More text", "some more text", new HashSet<>(),
-                    new Address("Chr. den 8. vej", "",
-                            new CityInfo("8600", "Silkeborg")), new HashSet<>());
-            p1.addPhone(new Phone("12345678", "fastnet"));
+            CityInfo c1 = new CityInfo("8600", "Silkeborg");
+            Address a1 = new Address("Chr. den 8. vej", "", c1);
             Hobby h1 = new Hobby("fodbold", "spark", new HashSet<>());
+            Hobby h2 = new Hobby("musik", "lalala");
+            p1 = new Person("Some txt", "More text", "some more text");
+            p1.addPhone(new Phone("12345678", "fastnet"));
             p1.addHobby(h1);
-
-            p2 = new Person("aaa", "bbb", "ccc", new HashSet<>(),
-                    new Address("Mobo vej", "",
-                            new CityInfo("4040", "Jyllinge")), new HashSet<>());
+            p1.setAddress(a1);
+            CityInfo c2 = new CityInfo("4040", "Jyllinge");
+            Address a2 = new Address("Mobo vej", "", c2);
+            p2 = new Person("aaa", "bbb", "ccc");
             p2.addPhone(new Phone("87654321", "mobile"));
             p2.addHobby(h1);
+            p2.addHobby(h2);
+            p2.setAddress(a2);
+
+            em.persist(c1);
+            em.persist(c2);
+            em.persist(a1);
+            em.persist(a2);
+            em.persist(h1);
+            em.persist(h2);
 
             em.persist(p1);
             em.persist(p2);
@@ -93,7 +103,7 @@ public class FacadeTest {
     void testCreatePerson() {
         System.out.println("Testing create()");
         Person p = new Person("test", "testy", "12345");
-        p.setAddress(new Address("", "", new CityInfo("8600", "silkeborg")));
+        p.setAddress(new Address("", "", new CityInfo("8600", "Silkeborg")));
         PersonDTO pd1 = new PersonDTO(p);
         facade.create(pd1);
         int expected = 3;
@@ -132,9 +142,11 @@ public class FacadeTest {
 
         String expected = "bob";
         p1.setFirstname("bob");
-        p1.setAddress(new Address("Danmarks gade 2","", new CityInfo("7430", "Ikast")));
+        p1.setAddress(new Address("Danmarks gade 2","", new CityInfo("8600", "Silkeborg")));
+        //p1.addHobby(new Hobby("musik", "lalala"));
+
         p1.getHobbies().remove(p1.getHobbies().iterator().next());
-        System.out.println(p1.getHobbies().size());
+        //System.out.println(p1.getHobbies().size());
         String actual = facade.editPerson(new PersonDTO(p1)).getFirstname();
         assertEquals(expected, actual);
     }

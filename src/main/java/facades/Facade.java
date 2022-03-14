@@ -118,6 +118,31 @@ public class Facade {
         }
     }
 
+    public boolean hasHobby(String hobbyname, Person person) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Hobby> query = em.createQuery("SELECT h FROM Hobby h WHERE h.name =:hobby", Hobby.class);
+            query.setParameter("hobby", hobbyname);
+            Hobby hobby = query.getSingleResult();
+            if(hobby.getPersons().contains(person)) {
+                return true;
+            }
+        } finally {
+            em.close();
+        }
+        return false;
+    }
+
+    public void compareHobbies(PersonDTO pDTO, Person p) {
+        for (Hobby h : p.getHobbies()) {
+            if(pDTO.getHobbies().contains(h)) {
+
+            } else {
+
+            }
+        }
+    }
+
     public Address checkAddress(AddressDTO addressDTO) {
         EntityManager em = emf.createEntityManager();
         Address address;
@@ -200,11 +225,24 @@ public class Facade {
 
         Person person = em.find(Person.class, personDTO.getId());
         Address address = em.find(Address.class, person.getAddress().getId());
-        if (address.getPersons().size() <= 1) {
-            em.remove(address);
+
+        if(!(personDTO.getAddress().equals(address))) {
+            person.setAddress(new Address(personDTO.getAddress()));
+            if (address.getPersons().size() <= 1) {
+                em.remove(address);
+            }
         }
-//        person.setAddress(personDTO.getAddress());
-//
+
+        CityInfo cityInfo = checkCityInfo(person.getAddress().getCityInfo());
+        if (cityInfo != null) {
+            person.getAddress().setCityInfo(cityInfo);
+        }
+
+        personDTO.getHobbies().forEach(hobbyDTO -> {
+            person.addHobby(checkHobby(hobbyDTO));
+        });
+
+
 //        // todo: make sure that hobbies and phones that are no longer in use is remove from DB
 //        person.setHobbies(personDTO.getHobbies());
 //        person.setPhones(personDTO.getPhones());
@@ -216,6 +254,15 @@ public class Facade {
 
         try {
             em.getTransaction().begin();
+            person.getHobbies().forEach(hobby -> {
+                if (hobby.getId() != null){
+                    em.merge(hobby);
+                } else {
+                    if(!hasHobby(hobby.getName(), person)) {
+                        em.persist(hobby);
+                    }
+                }
+            });
             em.merge(person);
             em.getTransaction().commit();
         } finally {

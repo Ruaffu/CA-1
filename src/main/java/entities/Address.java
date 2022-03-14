@@ -1,5 +1,6 @@
 package entities;
 
+import dtos.AddressDTO;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
 
 import javax.persistence.*;
@@ -42,6 +43,12 @@ public class Address {
         this.street = street;
         this.additionalInfo = additionalInfo;
         this.cityInfo = cityInfo;
+    }
+
+    public Address(AddressDTO addressDTO) {
+        this.street = addressDTO.getStreet();
+        this.additionalInfo = addressDTO.getAdditionalInfo();
+        this.cityInfo = new CityInfo(addressDTO.getZipcode(), addressDTO.getCity());
     }
 
     public void addPerson(Person person) {
