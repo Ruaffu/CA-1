@@ -26,6 +26,10 @@ public class ApplicationConfig extends Application {
         resources.add(rest.HobbyResource.class);
         resources.add(rest.CityInfoResource.class);
         resources.add(errorhandling.PersonNotFoundExceptionMapper.class);
+        resources.add(errorhandling.CityNotFoundExceptionMapper.class);
+        resources.add(errorhandling.HobbyNotFoundExceptionMapper.class);
+        resources.add(errorhandling.PhoneExistsExceptionMapper.class);
+        resources.add(errorhandling.MissingInputExceptionMapper.class);
     }
     
 }
