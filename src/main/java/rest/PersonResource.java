@@ -4,6 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dtos.PersonDTO;
 import entities.Person;
+import errorhandling.CityNotFoundException;
+import errorhandling.InvalidInputException;
+import errorhandling.PersonNotFoundException;
 import utils.EMF_Creator;
 import facades.Facade;
 import javax.persistence.EntityManagerFactory;
@@ -35,7 +38,8 @@ public class PersonResource {
     @GET
     @Path("/{id}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response getPersonById(@PathParam("id") long id) {
+    public Response getPersonById(@PathParam("id") long id) throws PersonNotFoundException
+    {
         return Response
                 .ok()
                 .entity(GSON.toJson(FACADE.getById(id)))
@@ -65,7 +69,8 @@ public class PersonResource {
     @GET
     @Path("/zipcode/{zipcode}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response getPersonsByZipcode(@PathParam("zipcode") String zipcode) {
+    public Response getPersonsByZipcode(@PathParam("zipcode") String zipcode) throws InvalidInputException
+    {
         return Response
                 .ok()
                 .entity(GSON.toJson(FACADE.getAllPersonsByZip(zipcode)))
@@ -75,7 +80,8 @@ public class PersonResource {
     @GET
     @Path("/phone/{phone}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response getPersonByPhone(@PathParam("phone") String phone) {
+    public Response getPersonByPhone(@PathParam("phone") String phone) throws PersonNotFoundException
+    {
         return Response
                 .ok()
                 .entity(GSON.toJson(FACADE.getPersonByPhoneNumber(phone)))
@@ -86,7 +92,8 @@ public class PersonResource {
     @Path("/delete/{id}")
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response deletePersonById(@PathParam("id") Long id) {
+    public Response deletePersonById(@PathParam("id") Long id) throws PersonNotFoundException
+    {
         PersonDTO personDTO = FACADE.deletePersonByID(id);
         return Response
                 .ok()

@@ -2,6 +2,7 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import errorhandling.HobbyNotFoundException;
 import facades.Facade;
 import utils.EMF_Creator;
 
@@ -20,7 +21,8 @@ public class HobbyResource {
     @GET
     @Path("/all")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response getAllHobbies() {
+    public Response getAllHobbies() throws HobbyNotFoundException
+    {
         return Response
                 .ok()
                 .entity(GSON.toJson(FACADE.getAllHobbies()))

@@ -2,11 +2,12 @@ package facades;
 
 import dtos.*;
 import entities.*;
-import errorhandling.PhoneExistsException;
+import errorhandling.*;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
@@ -176,11 +177,11 @@ public class Facade {
     }
 
     // todo: create custom exception
-    public PersonDTO getById(long id) { //throws RenameMeNotFoundException {
+    public PersonDTO getById(long id) throws PersonNotFoundException {
         EntityManager em = emf.createEntityManager();
         Person person = em.find(Person.class, id);
-//        if (person == null)
-//            throw new RenameMeNotFoundException("The RenameMe entity with ID: "+id+" Was not found");
+        if (person == null)
+            throw new PersonNotFoundException("Person not found");
         return new PersonDTO(person);
     }
 
@@ -201,18 +202,27 @@ public class Facade {
     }
 
     //Get all persons living in a given city (i.e. 2800 Lyngby)
-    public Set<PersonDTO> getAllPersonsByZip(String zipcode) {
+    public Set<PersonDTO> getAllPersonsByZip(String zipcode) throws InvalidInputException
+    {
         EntityManager em = emf.createEntityManager();
-        TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p JOIN Address a ON p.address.id = a.id WHERE a.cityInfo.zipcode =:zipcode", Person.class);
-        query.setParameter("zipcode", zipcode);
-        List<Person> people = query.getResultList();
-        return PersonDTO.getPersonDTOs(people);
+        Pattern pattern = Pattern.compile("^[0-9]{4}");
+        if (!pattern.matcher(zipcode).matches())
+            throw new InvalidInputException("Invalid input, zipcode must be 4 characters long");
+
+            TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p JOIN Address a ON p.address.id = a.id WHERE a.cityInfo.zipcode =:zipcode", Person.class);
+            query.setParameter("zipcode", zipcode);
+            List<Person> people = query.getResultList();
+            return PersonDTO.getPersonDTOs(people);
+
     }
 
-    public Set<CityInfoDTO> getAllCityInfos() {
+    public Set<CityInfoDTO> getAllCityInfos() throws CityNotFoundException
+    {
         EntityManager em = emf.createEntityManager();
         TypedQuery<CityInfo> query = em.createQuery("SELECT c FROM CityInfo c", CityInfo.class);
         List<CityInfo> cityInfos = query.getResultList();
+        if (cityInfos.isEmpty())
+            throw new CityNotFoundException("No cities found in database");
         return CityInfoDTO.getCityInfoDTOs(cityInfos);
     }
 
@@ -324,12 +334,18 @@ public class Facade {
         return hobby.getPersons().size();
     }
 
-    public PersonDTO getPersonByPhoneNumber(String number) {
+    public PersonDTO getPersonByPhoneNumber(String number) throws PersonNotFoundException {
         EntityManager em = getEntityManager();
-        TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p JOIN Phone pn WHERE pn.number =:number AND p.id= pn.person.id", Person.class);
-        query.setParameter("number", number);
-        PersonDTO personDTO = new PersonDTO(query.getSingleResult());
-        return personDTO;
+        try
+        {
+            TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p JOIN Phone pn WHERE pn.number =:number AND p.id= pn.person.id", Person.class);
+            query.setParameter("number", number);
+            PersonDTO personDTO = new PersonDTO(query.getSingleResult());
+            return personDTO;
+        } catch (NoResultException e)
+        {
+            throw new PersonNotFoundException("Person not found");
+        }
     }
 
     public Set<HobbyDTO> getAllHobbies() {
@@ -339,9 +355,11 @@ public class Facade {
         return HobbyDTO.getHobbyDTOs(hobbyList);
     }
 
-    public PersonDTO deletePersonByID(long id) {
+    public PersonDTO deletePersonByID(long id) throws PersonNotFoundException {
         EntityManager em = getEntityManager();
         Person person = em.find(Person.class, id);
+        if (person == null)
+            throw new PersonNotFoundException("Person not found");
         try {
             em.getTransaction().begin();
 

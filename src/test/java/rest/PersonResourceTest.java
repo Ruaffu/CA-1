@@ -2,6 +2,7 @@ package rest;
 
 import dtos.PersonDTO;
 import entities.*;
+import errorhandling.PersonNotFoundException;
 import facades.Facade;
 import io.restassured.path.json.JsonPath;
 import utils.EMF_Creator;
@@ -276,7 +277,8 @@ public class PersonResourceTest {
     }
 
     @Test
-    void deletePersonById() {
+    void deletePersonById() throws PersonNotFoundException
+    {
         System.out.println("Testing to delete and get person by id");
         Facade facade = Facade.getFacade(emf);
         PersonDTO personDTO = facade.deletePersonByID(3);

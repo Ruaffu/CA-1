@@ -4,6 +4,10 @@ import dtos.AddressDTO;
 import dtos.HobbyDTO;
 import dtos.PersonDTO;
 import entities.*;
+import errorhandling.CityNotFoundException;
+import errorhandling.HobbyNotFoundException;
+import errorhandling.InvalidInputException;
+import errorhandling.PersonNotFoundException;
 import org.junit.jupiter.api.*;
 import utils.EMF_Creator;
 
@@ -83,7 +87,8 @@ public class FacadeTest {
     }
 
     @Test
-    void testGetPersonById() {
+    void testGetPersonById() throws PersonNotFoundException
+    {
         System.out.println("Testing getById()");
         String expected = p1.getFirstname();
         System.out.println(p1.getId());
@@ -120,7 +125,8 @@ public class FacadeTest {
     }
 
     @Test
-    void testGetPersonsByZipcode() {
+    void testGetPersonsByZipcode() throws InvalidInputException
+    {
         System.out.println("Testing getPersonByZip()");
         int expected = 1;
         int actual = facade.getAllPersonsByZip("8600").size();
@@ -129,7 +135,8 @@ public class FacadeTest {
     }
 
     @Test
-    void testGetAllCityInfos() {
+    void testGetAllCityInfos() throws CityNotFoundException
+    {
         System.out.println("Testing getAllCityInfos()");
         int expected = 2;
         int actual = facade.getAllCityInfos().size();
@@ -172,7 +179,8 @@ public class FacadeTest {
     }
 
     @Test
-    void testGetPersonByPhoneNumber(){
+    void testGetPersonByPhoneNumber() throws PersonNotFoundException
+    {
         System.out.println("Testing getPersonByPhoneNumber()");
         String expected = "Some txt";
         String actual = facade.getPersonByPhoneNumber("12345678").getFirstname();
@@ -180,7 +188,8 @@ public class FacadeTest {
     }
 
     @Test
-    void testDeletePersonById(){
+    void testDeletePersonById() throws PersonNotFoundException
+    {
         System.out.println("Testing deletePersonById()");
         int expected = 1;
         PersonDTO deletedPerson = facade.deletePersonByID(p1.getId());
@@ -191,7 +200,8 @@ public class FacadeTest {
     }
 
     @Test
-    void testGetAllHobbies(){
+    void testGetAllHobbies() throws HobbyNotFoundException
+    {
         System.out.println("Testing getAllHobbies()");
         int expected = 1;
         int actual = facade.getAllHobbies().size();;

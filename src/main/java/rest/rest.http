@@ -11,11 +11,11 @@ GET http://localhost:8080/CA1_war_exploded/api/person/hobby/Fodbold
 
 ###
 //get persons by phone number
-GET http://localhost:8080/CA1_war_exploded/api/person/phone/11111111
+GET http://localhost:8080/CA1_war_exploded/api/person/phone/11111111151515
 
 ###
 //delete person by id and get the deleted person
-DELETE http://localhost:8080/CA1_war_exploded/api/person/delete/7
+DELETE http://localhost:8080/CA1_war_exploded/api/person/delete/700
 
 ###
 //edit person by id and get the edited person
@@ -75,3 +75,9 @@ Content-Type: application/json
     }
   ]
 }
+
+###
+GET http://localhost:8080/CA1_war_exploded/api/hobby/all
+
+###
+GET http://localhost:8080/CA1_war_exploded/api/person/zipcode/455

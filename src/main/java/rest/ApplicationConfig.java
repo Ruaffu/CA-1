@@ -30,6 +30,7 @@ public class ApplicationConfig extends Application {
         resources.add(errorhandling.HobbyNotFoundExceptionMapper.class);
         resources.add(errorhandling.PhoneExistsExceptionMapper.class);
         resources.add(errorhandling.MissingInputExceptionMapper.class);
+        resources.add(errorhandling.InvalidInputExceptionMapper.class);
     }
     
 }

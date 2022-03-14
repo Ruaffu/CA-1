@@ -2,6 +2,7 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import errorhandling.CityNotFoundException;
 import facades.Facade;
 import utils.EMF_Creator;
 
@@ -19,7 +20,8 @@ public class CityInfoResource {
     @GET
     @Path("/all")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response getAllCityInfos() {
+    public Response getAllCityInfos() throws CityNotFoundException
+    {
         return Response
                 .ok()
                 .entity(GSON.toJson(FACADE.getAllCityInfos()))
