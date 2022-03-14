@@ -1,5 +1,7 @@
 package entities;
 
+import dtos.PhoneDTO;
+
 import javax.persistence.*;
 
 @Entity
@@ -26,6 +28,11 @@ public class Phone {
         this.number = number;
         this.description = description;
         this.person = person;
+    }
+
+    public Phone(PhoneDTO phoneDTO){
+        this.number = phoneDTO.getNumber();
+        this.description = phoneDTO.getDescription();
     }
 
     public void setId(Long id) {

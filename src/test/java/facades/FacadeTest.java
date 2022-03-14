@@ -144,7 +144,9 @@ public class FacadeTest {
         p1.setFirstname("bob");
         p1.setAddress(new Address("Danmarks gade 2","", new CityInfo("8600", "Silkeborg")));
         //p1.addHobby(new Hobby("musik", "lalala"));
-
+        p1.getPhones().remove(p1.getPhones().iterator().next());
+        p1.addPhone(new Phone("86865221","home"));
+        p1.addPhone(new Phone("87654321","mobile"));
         p1.getHobbies().remove(p1.getHobbies().iterator().next());
         //System.out.println(p1.getHobbies().size());
         String actual = facade.editPerson(new PersonDTO(p1)).getFirstname();

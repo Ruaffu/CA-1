@@ -72,7 +72,7 @@ public class Facade {
 
             personDTO.getPhones().forEach(phoneDTO -> {
                 try {
-                    person.addPhone(checkPhone(phoneDTO));
+                    person.addPhone(existsPhone(phoneDTO));
                 } catch (PhoneExistsException e) {
                     System.out.println(e.getMessage());
                 }
@@ -103,7 +103,7 @@ public class Facade {
         return new PersonDTO(person);
     }
 
-    public Phone checkPhone(PhoneDTO phoneDTO) throws PhoneExistsException{
+    public Phone existsPhone(PhoneDTO phoneDTO) throws PhoneExistsException{
         EntityManager em = emf.createEntityManager();
         try {
             TypedQuery<Phone> query = em.createQuery("SELECT p FROM Phone p WHERE p.number =:number", Phone.class);
@@ -112,12 +112,20 @@ public class Facade {
         } catch (NoResultException e) {
             return new Phone(phoneDTO.getNumber(), phoneDTO.getDescription());
         } finally {
-
+            em.close();
         }
-
-
-
-
+    }
+    public Phone checkPhone(PhoneDTO phoneDTO) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Phone> query = em.createQuery("SELECT p FROM Phone p WHERE p.number =:number", Phone.class);
+            query.setParameter("number", phoneDTO.getNumber());
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return new Phone(phoneDTO.getNumber(), phoneDTO.getDescription());
+        } finally {
+            em.close();
+        }
     }
 
     public Hobby checkHobby(HobbyDTO hobbyDTO) {
@@ -247,11 +255,35 @@ public class Facade {
              hobby.getPersons().remove(person);
          });
 
+        // check if phone exists
+        personDTO.getPhones().forEach(phone -> {
+                Phone p = checkPhone(phone);
+                if (p.getPerson() == person) {
+                    person.addPhone(p);
+                } else if (p.getPerson() == null) {
+                    person.addPhone(p);
+                } else {
+                    try {
+                        personDTO.getPhones().remove(phone);
+                        throw new PhoneExistsException("Phone already Exists");
+                    } catch (PhoneExistsException e) {
+                        System.out.println(e.getMessage());
+                    }
+                }
+        });
 
+        // phones to remove
+        Set<Phone> phonesToRemove = new HashSet<>();
+        for (Phone p : person.getPhones()) {
+            if (!(personDTO.getPhones().contains(new PhoneDTO(p)))) {
+                phonesToRemove.add(p);
+            }
+        }
+        // removes person from no longer active Phones
+        phonesToRemove.forEach(phone -> {
+            person.getPhones().remove(phone);
+        });
 
-//        // todo: make sure that hobbies and phones that are no longer in use is remove from DB
-//        person.setHobbies(personDTO.getHobbies());
-//        person.setPhones(personDTO.getPhones());
 
 
         person.setFirstname(personDTO.getFirstname());
@@ -267,7 +299,18 @@ public class Facade {
                     em.persist(hobby);
                 }
             });
+            person.getPhones().forEach(phone -> {
+                if (phone.getId() != null) {
+                    em.merge(phone);
+                } else {
+                    em.persist(phone);
+                }
+            });
             hobbiesToRemove.forEach(em::merge);
+            phonesToRemove.forEach(phone -> {
+                System.out.println(phone.getNumber());
+            });
+            phonesToRemove.forEach(em::remove);
 
             em.merge(person);
             em.getTransaction().commit();
