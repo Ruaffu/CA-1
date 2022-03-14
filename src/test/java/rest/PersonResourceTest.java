@@ -104,4 +104,60 @@ public class PersonResourceTest
                 .body("lastname", equalTo(p1.getLastname()));
     }
 
+    @Test
+    void testGetAllPeople(){
+        given()
+                .contentType(MediaType.APPLICATION_JSON)
+                .get("/person/all")
+                .then()
+                .assertThat()
+                .statusCode(200)
+                .log().body();
+    }
+
+    @Test
+    void testGetPersonByHobby(){
+        given()
+                .contentType(MediaType.APPLICATION_JSON)
+                .get("/person/hobby/{hobby}")
+                .then()
+                .assertThat()
+                .statusCode(200)
+                .log().body();
+    }
+
+    @Test
+    void testGetPersonByZipcode(){
+        given()
+                .contentType(MediaType.APPLICATION_JSON)
+                .get("/person/zipcode/{zipcode}")
+                .then()
+                .assertThat()
+                .statusCode(200)
+                .log().body();
+    }
+
+    @Test
+    void testGetPersonByPhone(){
+        given()
+                .contentType(MediaType.APPLICATION_JSON)
+                .get("/person/phone/{phone}")
+                .then()
+                .assertThat()
+                .statusCode(200)
+                .log().body();
+    }
+
+    @Test
+    void testDeletePersonByID(){
+        given()
+                .contentType(ContentType.JSON)
+                .pathParam("id", p2.getId())
+                .delete("/person/delete/{id}")
+                .then()
+                .statusCode(200)
+                .body("id",equalTo(p2.getId()));
+    }
+
+
 }
