@@ -216,10 +216,7 @@ public class Facade {
         return CityInfoDTO.getCityInfoDTOs(cityInfos);
     }
 
-    // todo: remake method
-    //  so that it works with DTO,
-    //  checks for already existing data,
-    //  and remove not used data from DB
+    // todo: refactor this methodgit
     public PersonDTO editPerson(PersonDTO personDTO) {
         EntityManager em = emf.createEntityManager();
 
@@ -283,8 +280,6 @@ public class Facade {
         phonesToRemove.forEach(phone -> {
             person.getPhones().remove(phone);
         });
-
-
 
         person.setFirstname(personDTO.getFirstname());
         person.setLastname(personDTO.getLastname());
