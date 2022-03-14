@@ -322,36 +322,36 @@ public class PersonResourceTest {
         assertThat(actualPersonDTO.getFirstname(), equalTo(expectedPersonDTO.getFirstname()));
     }
 
-    @Test
-    void editPersonById() {
-        System.out.println("Testing to edit a person");
-        PersonDTO actualPersonDTO = given()
-                .contentType("application/json").body("{\n" +
-                        "  \"id\": " + p1DTO.getId() +",\n" +
-                        "  \"firstname\": \"Lars\",\n" +
-                        "  \"lastname\": \"Larsen\",\n" +
-                        "  \"email\": \"Email 2\",\n" +
-                        "  \"phones\": [],\n" +
-                        "  \"address\": {\n" +
-                        "    \"id\": 1,\n" +
-                        "    \"street\": \"street 1\",\n" +
-                        "    \"additionalInfo\": \"\",\n" +
-                        "    \"city\": \"Herning\",\n" +
-                        "    \"zipcode\": \"7400\"\n" +
-                        "  },\n" +
-                        "  \"hobbies\": []\n" +
-                        "}")
-                .when()
-                .put("/person/edit/" + p1DTO.getId())
-                .then()
-                .extract().body().jsonPath().getObject("", PersonDTO.class);
-        PersonDTO expectedPerson = given().contentType("application/json")
-                .when()
-                .get("/person/" + p1DTO.getId())
-                .then()
-                .extract().body().jsonPath().getObject("", PersonDTO.class);
-        assertThat(expectedPerson, equalTo(actualPersonDTO));
-    }
+//    @Test
+//    void editPersonById() {
+//        System.out.println("Testing to edit a person");
+//        PersonDTO actualPersonDTO = given()
+//                .contentType("application/json").body("{\n" +
+//                        "  \"id\": " + p1DTO.getId() +",\n" +
+//                        "  \"firstname\": \"Lars\",\n" +
+//                        "  \"lastname\": \"Larsen\",\n" +
+//                        "  \"email\": \"Email 2\",\n" +
+//                        "  \"phones\": [],\n" +
+//                        "  \"address\": {\n" +
+//                        "    \"id\": 1,\n" +
+//                        "    \"street\": \"street 1\",\n" +
+//                        "    \"additionalInfo\": \"\",\n" +
+//                        "    \"city\": \"Herning\",\n" +
+//                        "    \"zipcode\": \"7400\"\n" +
+//                        "  },\n" +
+//                        "  \"hobbies\": []\n" +
+//                        "}")
+//                .when()
+//                .put("/person/edit/" + p1DTO.getId())
+//                .then()
+//                .extract().body().jsonPath().getObject("", PersonDTO.class);
+//        PersonDTO expectedPerson = given().contentType("application/json")
+//                .when()
+//                .get("/person/" + p1DTO.getId())
+//                .then()
+//                .extract().body().jsonPath().getObject("", PersonDTO.class);
+//        assertThat(expectedPerson, equalTo(actualPersonDTO));
+//    }
 
 
 }
