@@ -1,10 +1,8 @@
 package facades;
 
-import dtos.AddressDTO;
-import dtos.CityInfoDTO;
-import dtos.HobbyDTO;
-import dtos.PersonDTO;
+import dtos.*;
 import entities.*;
+import errorhandling.PhoneExistsException;
 
 import java.util.HashSet;
 import java.util.List;
@@ -48,7 +46,7 @@ public class Facade {
         return emf.createEntityManager();
     }
 
-    // todo: check if phone, hobby already exists
+    // todo: check if phone
     public PersonDTO create(PersonDTO personDTO) {
         Person person = new Person(personDTO.getFirstname(), personDTO.getLastname(), personDTO.getEmail());
         EntityManager em = getEntityManager();
@@ -72,9 +70,12 @@ public class Facade {
                 person.addHobby(checkHobby(hobbyDTO));
             });
 
-
             personDTO.getPhones().forEach(phoneDTO -> {
-                person.addPhone(new Phone(phoneDTO.getNumber(), phoneDTO.getDescription()));
+                try {
+                    person.addPhone(checkPhone(phoneDTO));
+                } catch (PhoneExistsException e) {
+                    System.out.println(e.getMessage());
+                }
             });
 
             em.getTransaction().begin();
@@ -102,44 +103,35 @@ public class Facade {
         return new PersonDTO(person);
     }
 
-    private Hobby checkHobby(HobbyDTO hobbyDTO) {
+    public Phone checkPhone(PhoneDTO phoneDTO) throws PhoneExistsException{
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Phone> query = em.createQuery("SELECT p FROM Phone p WHERE p.number =:number", Phone.class);
+            query.setParameter("number", phoneDTO.getNumber());
+            throw new PhoneExistsException("this phone number already exists");
+        } catch (NoResultException e) {
+            return new Phone(phoneDTO.getNumber(), phoneDTO.getDescription());
+        } finally {
+
+        }
+
+
+
+
+    }
+
+    public Hobby checkHobby(HobbyDTO hobbyDTO) {
         EntityManager em = emf.createEntityManager();
         try {
             TypedQuery<Hobby> query = em.createQuery("SELECT h FROM Hobby h WHERE h.name =:name", Hobby.class);
             query.setParameter("name", hobbyDTO.getName());
 
-            Hobby hobby = query.getSingleResult();
-            return hobby;
+            return query.getSingleResult();
 
         } catch (NoResultException e) {
             return new Hobby(hobbyDTO.getName(), hobbyDTO.getDescription());
         } finally {
             em.close();
-        }
-    }
-
-    public boolean hasHobby(String hobbyname, Person person) {
-        EntityManager em = emf.createEntityManager();
-        try {
-            TypedQuery<Hobby> query = em.createQuery("SELECT h FROM Hobby h WHERE h.name =:hobby", Hobby.class);
-            query.setParameter("hobby", hobbyname);
-            Hobby hobby = query.getSingleResult();
-            if (hobby.getPersons().contains(person)) {
-                return true;
-            }
-        } finally {
-            em.close();
-        }
-        return false;
-    }
-
-    public void compareHobbies(PersonDTO pDTO, Person p) {
-        for (Hobby h : p.getHobbies()) {
-            if (pDTO.getHobbies().contains(h)) {
-
-            } else {
-
-            }
         }
     }
 
