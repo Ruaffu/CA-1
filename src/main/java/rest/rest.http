@@ -15,25 +15,25 @@ GET http://localhost:8080/CA1_war_exploded/api/person/phone/11111111
 
 ###
 //delete person by id and get the deleted person
-DELETE http://localhost:8080/CA1_war_exploded/api/person/delete/3
+DELETE http://localhost:8080/CA1_war_exploded/api/person/delete/7
 
 ###
 //edit person by id and get the edited person
-PUT http://localhost:8080/CA1_war_exploded/api/person/edit/5
+PUT http://localhost:8080/CA1_war_exploded/api/person/edit/2
 Content-Type: application/json
 
 {
-  "id": 5,
-  "firstname": "Eva",
-  "lastname": "F.",
-  "email": "eva@expert.com",
+  "id": 2,
+  "firstname": "Lars",
+  "lastname": "Larsen",
+  "email": "Email 2",
   "phones": [],
   "address": {
     "id": 1,
-    "street": "Hvidovrevej",
-    "additionalInfo": "3",
-    "city": "Hvidovre",
-    "zipcode": "2650"
+    "street": "street 1",
+    "additionalInfo": "",
+    "city": "Herning",
+    "zipcode": "7400"
   },
   "hobbies": []
 }
@@ -59,8 +59,8 @@ Content-Type: application/json
     "id": 5,
     "street": "Herlevvej",
     "additionalInfo": "5",
-    "city": "Herlev",
-    "zipcode": "2730"
+    "city": "Herning",
+    "zipcode": "7400"
   },
   "hobbies": [
     {
