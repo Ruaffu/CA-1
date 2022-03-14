@@ -8,6 +8,7 @@ package dtos;
 import entities.Person;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.List;
 
@@ -17,7 +18,7 @@ import java.util.List;
  */
 
 public class PersonDTO {
-    private long id;
+    private Long id;
     private String firstname;
     private String lastname;
     private String email;
@@ -52,7 +53,7 @@ public class PersonDTO {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -115,5 +116,18 @@ public class PersonDTO {
                 ", address=" + address +
                 ", hobbies=" + hobbies +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PersonDTO personDTO = (PersonDTO) o;
+        return Objects.equals(id, personDTO.id) && Objects.equals(firstname, personDTO.firstname) && Objects.equals(lastname, personDTO.lastname) && Objects.equals(email, personDTO.email) && Objects.equals(phones, personDTO.phones) && Objects.equals(address, personDTO.address) && Objects.equals(hobbies, personDTO.hobbies);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, firstname, lastname, email, phones, address, hobbies);
     }
 }

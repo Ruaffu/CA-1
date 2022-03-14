@@ -3,6 +3,7 @@ package dtos;
 import entities.Phone;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public class PhoneDTO {
@@ -54,5 +55,18 @@ public class PhoneDTO {
                 ", number='" + number + '\'' +
                 ", description='" + description + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PhoneDTO phoneDTO = (PhoneDTO) o;
+        return Objects.equals(id, phoneDTO.id) && Objects.equals(number, phoneDTO.number) && Objects.equals(description, phoneDTO.description);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, number, description);
     }
 }
