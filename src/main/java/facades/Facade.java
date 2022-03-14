@@ -71,13 +71,28 @@ public class Facade {
                 person.addHobby(checkHobby(hobbyDTO));
             });
 
-            personDTO.getPhones().forEach(phoneDTO -> {
-                try {
-                    person.addPhone(existsPhone(phoneDTO));
-                } catch (PhoneExistsException e) {
-                    System.out.println(e.getMessage());
+            personDTO.getPhones().forEach(phone -> {
+                Phone p = checkPhone(phone);
+                if (p.getPerson() == person) {
+                    person.addPhone(p);
+                } else if (p.getPerson() == null) {
+                    person.addPhone(p);
+                } else {
+                    try {
+                        personDTO.getPhones().remove(phone);
+                        throw new PhoneExistsException("Phone already Exists");
+                    } catch (PhoneExistsException e) {
+                        System.out.println(e.getMessage());
+                    }
                 }
             });
+//            personDTO.getPhones().forEach(phoneDTO -> {
+//                try {
+//                    person.addPhone(existsPhone(phoneDTO));
+//                } catch (PhoneExistsException e) {
+//                    System.out.println(e.getMessage());
+//                }
+//            });
 
             em.getTransaction().begin();
             em.persist(person);
@@ -226,7 +241,7 @@ public class Facade {
         return CityInfoDTO.getCityInfoDTOs(cityInfos);
     }
 
-    // todo: refactor this methodgit
+    // todo: refactor this method
     public PersonDTO editPerson(PersonDTO personDTO) {
         EntityManager em = emf.createEntityManager();
 
@@ -370,6 +385,7 @@ public class Facade {
 
             // removes address, if it's the only one living there.
             Address addressToRemove = em.find(Address.class, person.getAddress().getId());
+            addressToRemove.getPersons().remove(person);
             if (addressToRemove.getPersons().size() <= 1) {
                 em.remove(addressToRemove);
             }

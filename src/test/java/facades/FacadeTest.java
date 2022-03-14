@@ -48,7 +48,13 @@ public class FacadeTest {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
+            em.createNamedQuery("Phone.deleteAllRows").executeUpdate();
             em.createNamedQuery("Person.deleteAllRows").executeUpdate();
+            em.createNamedQuery("Hobby.deleteAllRows").executeUpdate();
+            em.createNamedQuery("Address.deleteAllRows").executeUpdate();
+            em.createNamedQuery("CityInfo.deleteAllRows").executeUpdate();
+
+
             CityInfo c1 = new CityInfo("8600", "Silkeborg");
             Address a1 = new Address("Chr. den 8. vej", "", c1);
             Hobby h1 = new Hobby("fodbold", "spark", new HashSet<>());
@@ -203,7 +209,7 @@ public class FacadeTest {
     void testGetAllHobbies() throws HobbyNotFoundException
     {
         System.out.println("Testing getAllHobbies()");
-        int expected = 1;
+        int expected = 2;
         int actual = facade.getAllHobbies().size();;
         assertEquals(expected, actual);
     }

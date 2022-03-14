@@ -1,5 +1,7 @@
 package rest;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import dtos.PersonDTO;
 import entities.*;
 import errorhandling.PersonNotFoundException;
@@ -46,6 +48,8 @@ public class PersonResourceTest {
     static final URI BASE_URI = UriBuilder.fromUri(SERVER_URL).port(SERVER_PORT).build();
     private static HttpServer httpServer;
     private static EntityManagerFactory emf;
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+
 
     static HttpServer startServer() {
         ResourceConfig rc = ResourceConfig.forApplication(new ApplicationConfig());
@@ -128,6 +132,7 @@ public class PersonResourceTest {
         c2 = new CityInfo("2800", "Kongens Lyngby");
         c3 = new CityInfo("2650", "Hvidovre");
         c4 = new CityInfo("8210", "Aarhus V");
+        c5 = new CityInfo("2730", "Herlev");
 
         a1 = new Address("Jyllingevej", "1", c1);
         a2 = new Address("Lyngbyvej", "2", c2);
@@ -169,9 +174,14 @@ public class PersonResourceTest {
         p5 = new Person("Eva", "E.", "eva@expert.com");
         p5.setAddress(a3); //sharing with person 3 (charlie)
 
+
         try {
             em.getTransaction().begin();
+            em.createNamedQuery("Phone.deleteAllRows").executeUpdate();
             em.createNamedQuery("Person.deleteAllRows").executeUpdate();
+            em.createNamedQuery("Hobby.deleteAllRows").executeUpdate();
+            em.createNamedQuery("Address.deleteAllRows").executeUpdate();
+            em.createNamedQuery("CityInfo.deleteAllRows").executeUpdate();
             em.persist(ph1);
             em.persist(ph2);
             em.persist(ph3);
@@ -184,6 +194,7 @@ public class PersonResourceTest {
             em.persist(c2);
             em.persist(c3);
             em.persist(c4);
+            em.persist(c5);
             em.persist(a1);
             em.persist(a2);
             em.persist(a3);
@@ -277,20 +288,16 @@ public class PersonResourceTest {
     }
 
     @Test
-    void deletePersonById() throws PersonNotFoundException
-    {
+    void deletePersonById() throws PersonNotFoundException {
         System.out.println("Testing to delete and get person by id");
-        Facade facade = Facade.getFacade(emf);
-        PersonDTO personDTO = facade.deletePersonByID(3);
-
-        List<PersonDTO> personDTOS = given()
+        PersonDTO personDTO = given()
                 .contentType("application/json")
                 .when()
-                .get("/person/all")
+                .delete("/person/delete/" + p1DTO.getId())
                 .then()
-                .extract().body().jsonPath().getList("", PersonDTO.class);
+                .extract().body().jsonPath().getObject("", PersonDTO.class);
 
-        assertThat(personDTOS.size(), equalTo(4));
+        assertThat(personDTO.getFirstname(), equalTo(new PersonDTO(p1).getFirstname()));
     }
 
     @Test
@@ -302,29 +309,48 @@ public class PersonResourceTest {
         person.setAddress(new Address("Herlevvej", "5", new CityInfo("2730", "Herlev")));
         person.addPhone(new Phone("55555555", "Mobil"));
         person.addHobby(h1);
-        facade.create(new PersonDTO(person));
+        PersonDTO actualPersonDTO = new PersonDTO(person);
+        String s = GSON.toJson(actualPersonDTO);
 
-        List<PersonDTO> personDTOS = given()
-                .contentType("application/json")
+        PersonDTO expectedPersonDTO = given()
+                .contentType("application/json").body(s)
                 .when()
-                .get("/person/all")
+                .post("/person/create")
                 .then()
-                .extract().body().jsonPath().getList("", PersonDTO.class);
+                .extract().body().jsonPath().getObject("", PersonDTO.class);
 
-        assertThat(personDTOS.size(), equalTo(6));
+        assertThat(actualPersonDTO.getFirstname(), equalTo(expectedPersonDTO.getFirstname()));
     }
 
-    //TODO: make test work
     @Test
     void editPersonById() {
         System.out.println("Testing to edit a person");
         PersonDTO actualPersonDTO = given()
-                .contentType("application/json")
+                .contentType("application/json").body("{\n" +
+                        "  \"id\": " + p1DTO.getId() +",\n" +
+                        "  \"firstname\": \"Lars\",\n" +
+                        "  \"lastname\": \"Larsen\",\n" +
+                        "  \"email\": \"Email 2\",\n" +
+                        "  \"phones\": [],\n" +
+                        "  \"address\": {\n" +
+                        "    \"id\": 1,\n" +
+                        "    \"street\": \"street 1\",\n" +
+                        "    \"additionalInfo\": \"\",\n" +
+                        "    \"city\": \"Herning\",\n" +
+                        "    \"zipcode\": \"7400\"\n" +
+                        "  },\n" +
+                        "  \"hobbies\": []\n" +
+                        "}")
                 .when()
-                .get("/person/edit/" + p1DTO.getId())
+                .put("/person/edit/" + p1DTO.getId())
                 .then()
                 .extract().body().jsonPath().getObject("", PersonDTO.class);
-        assertThat(actualPersonDTO, equalTo(p1DTO));
+        PersonDTO expectedPerson = given().contentType("application/json")
+                .when()
+                .get("/person/" + p1DTO.getId())
+                .then()
+                .extract().body().jsonPath().getObject("", PersonDTO.class);
+        assertThat(expectedPerson, equalTo(actualPersonDTO));
     }
 
 
